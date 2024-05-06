@@ -3,10 +3,12 @@ A farmer-to-consumer direct selling platform.
 ## Running the application locally
 After pulling the source code, install the node packages.
 
-    $ npm i
+    ~/website$ npm i
+    ~/api$ npm i
 Then run the application. This will start a server with hot-reload (changes are automatically reflected every after save.
 
-    $ npm run dev
+    ~/website$ npm run dev
+    ~/api$ npm run dev
 ## Developer guidelines
 Always take note of the following notes.
 1. **NEVER directly push nor edit main.** Before coding, always create a branch from the main branch.
