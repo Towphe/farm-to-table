@@ -47,7 +47,7 @@ function SignIn(){
             password : loginData.password
         }).then((response) => {
             // save token to http cookie
-            document.cookie = `token=${response.data.token}`;
+            Cookies.set('access_token', response.data.token);
             // redirect to home page
             window.location.href = "/";
         }).catch((err) => {

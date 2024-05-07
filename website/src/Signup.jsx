@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import Cookies from 'js-cookie';
 import CustomerNavBar from "./components/common/CustomerNavbar";
 import Footer from "./components/common/Footer";
 
@@ -63,7 +64,7 @@ function SignUp(){
             password: signupData.password
         }).then((response) => {
             // save token to http cookie
-            document.cookie = `token=${response.data.token}`;
+            Cookies.set('access_token', response.data.token); // add refresh_token later on
             // redirect to home page
             window.location.href = "/";
         }).catch((err) => {
