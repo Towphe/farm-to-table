@@ -1,8 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import Cookies from 'js-cookie';
-import CustomerNavBar from "./components/common/CustomerNavbar";
-import Footer from "./components/common/Footer";
+import CustomerNavBar from "../components/common/CustomerNavbar";
+import Footer from "../components/common/Footer";
 
 function SignUp(){
 
@@ -27,6 +27,14 @@ function SignUp(){
             [name]: value,
         }));
     };
+    /*
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        middleName: 't'
+    */
 
     const signup = async () => {
         // set false by default
@@ -84,8 +92,6 @@ function SignUp(){
     }
 
     return (
-        <>
-            <CustomerNavBar />
             <main className="w-full h-full flex flex-col justify-center items-center">
                 {/* Enter content here. Refer to Home.jsx for an example */}
                 <form className="w-4/5 sm:w-3/5 md:w-4/8 lg:w-1/4 xl:w-1/5 text-lg shadow-md py-4 px-2 rounded-xl flex flex-col">
@@ -118,8 +124,6 @@ function SignUp(){
                 </form>
                 <p className="block mt-4 text-md">Already have an account? Sign in <a href="/sign-in" className="text-smooth-yellow font-semibold hover:opacity-75">here</a>.</p>
             </main>
-            <Footer />
-        </>
     )
 }
 

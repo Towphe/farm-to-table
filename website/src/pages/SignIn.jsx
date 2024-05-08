@@ -1,7 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
-import CustomerNavBar from "./components/common/CustomerNavbar";
-import Footer from "./components/common/Footer";
+import CustomerNavBar from "../components/common/CustomerNavbar";
+import Footer from "../components/common/Footer";
+import Cookies from 'js-cookie';
 
 function SignIn(){
     const [loginData, setLoginData] = useState({
@@ -68,8 +69,6 @@ function SignIn(){
     }
 
     return (
-        <>
-            <CustomerNavBar />
             <main className="w-full h-full flex flex-col justify-center items-center">
                 {/* Enter content here. Refer to Home.jsx for an example */}
                 <form className="w-3/5 sm:w-2/5 md:w-4/8 lg:w-1/4 xl:w-1/5 text-lg shadow-md py-4 px-2 rounded-xl flex flex-col">
@@ -89,8 +88,6 @@ function SignIn(){
                 </form>
                 <p className="block mt-4 text-md">No account yet? Signup <a href="/sign-up" className="text-dark-green font-semibold hover:opacity-75">here</a>.</p>
             </main>
-            <Footer />
-        </>
     )
 }
 
