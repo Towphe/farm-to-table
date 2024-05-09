@@ -7,6 +7,8 @@ await mongoose.connect(process.env.MONGO_KEY, {
     useNewUrlParser: true, useUnifiedTopology: true
 });
 
+const TOKEN_EXPIRY_TIME = 604800;   // 1 week (in seconds)
+
 const User = mongoose.model('users', {
     firstName : String,
     middleName : String,
@@ -50,7 +52,7 @@ const signup = async (req, res) => {
     const accessToken = jwt.sign({userId: user._id, userType: user.userType}, accessTokenSecret, {expiresIn: '30m'});
     
     res.statusCode = 202;
-    res.send({'detail': 'Sign up success.', 'token' : accessToken});
+    res.send({'detail': 'Sign up success.', 'accessToken' : accessToken, 'role' : user.userType, 'expiresIn': TOKEN_EXPIRY_TIME});
 };
 
 // signs user in
@@ -80,7 +82,7 @@ const signin = async (req, res) => {
     console.log(jwt.verify(accessToken, accessTokenSecret));
 
     res.statusCode = 202;
-    res.send({'detail': 'Sign in success.', 'token' : accessToken});
+    res.send({'detail': 'Sign in success.',  'accessToken' : accessToken, 'role' : user.userType, 'expiresIn': TOKEN_EXPIRY_TIME});
 }
 
 const test = (req, res) => {

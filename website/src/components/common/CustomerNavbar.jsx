@@ -1,6 +1,14 @@
 
+import { useAuth } from './AuthProvider';
+
 function CustomerNavBar(){
     // add sign in state here later
+    const {token, signOut} = useAuth();
+
+    const signOut_ = () => {
+        signOut();
+        window.location.reload();
+    }
 
     const pages = [
         {name: "Home", route: "/"},
@@ -17,7 +25,7 @@ function CustomerNavBar(){
                         return <a className="text-lg font-semibold hover:opacity-75" href={page.route} key={pages.indexOf(page)}>{page.name}</a>;
                     })
                 }
-                <a className="text-lg font-semibold hover:opacity-75" href="/sign-in">Sign in</a>
+                {!token ? <a className="text-lg font-semibold hover:opacity-75" href="/sign-in">Sign in</a> : <span className="text-lg font-semibold hover:opacity-75 hover:cursor-pointer" onClick={signOut_}>Sign Out</span>}
             </div>
         </nav>
     )
