@@ -14,6 +14,8 @@ import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/Signup.jsx'
 import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
+import Products from './pages/Products.jsx'
+import ProductDetail from './pages/ProductDetail.jsx'
 
 function App(){
 
@@ -33,6 +35,13 @@ function App(){
                 {
                     path: 'sign-up',
                     element: <SignUp />
+                },
+                {
+                    path: 'products',
+                    element: <Products />
+                },{
+                    path: 'products/:code',
+                    element: <ProductDetail/>
                 }
             ]
         },
