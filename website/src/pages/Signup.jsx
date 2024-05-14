@@ -3,6 +3,8 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import CustomerNavBar from "../components/common/CustomerNavbar";
 import Footer from "../components/common/Footer";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../components/common/AuthProvider";
 
 function SignUp(){
 
@@ -18,6 +20,8 @@ function SignUp(){
     const [missingLastname, setLastnameAsMissing] = useState(false);
     const [missingEmail, setEmailAsMissing] = useState(false);
     const [missingPassword, setPasswordAsMissing] = useState(false);
+    const {setToken, setRole, setExpiry} = useAuth();
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -27,14 +31,6 @@ function SignUp(){
             [name]: value,
         }));
     };
-    /*
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        middleName: 't'
-    */
 
     const signup = async () => {
         // set false by default
@@ -71,10 +67,15 @@ function SignUp(){
             email: signupData.email,
             password: signupData.password
         }).then((response) => {
-            // save token to http cookie
-            Cookies.set('access_token', response.data.token); // add refresh_token later on
+            // save token
+            setToken(response.data.accessToken);
+            // save role
+            setRole(response.data.role);
+             // create expiry date then store expiry datetime
+            const expiresIn = DateTime.now().plus({seconds: response.data.expiresIn});
+            setExpiry(expiresIn);
             // redirect to home page
-            window.location.href = "/";
+            navigate("/", {replace: true});
         }).catch((err) => {
             console.log(err);
             switch (err.response.status){
