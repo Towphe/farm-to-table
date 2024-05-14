@@ -11,6 +11,8 @@ import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/Signup.jsx'
 import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
+import Products from './pages/Products.jsx'
+import ProductDetail from './pages/ProductDetail.jsx'
 import {ProtectedRoute} from './components/common/ProtectedRoute.jsx'
 import AuthProvider from "./components/common/AuthProvider.jsx";
 import axios from 'axios'
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
             {
                 path: 'sign-up',
                 element: <SignUp />
+            },
+            {
+                path: 'products',
+                element: <Products />
+            },
+            {
+                path: 'products/:code',
+                element: <ProductDetail/>
             }
         ]
     },
