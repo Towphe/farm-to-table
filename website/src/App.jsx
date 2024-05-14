@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import {
     createBrowserRouter,
@@ -11,9 +11,9 @@ import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/Signup.jsx'
 import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
-import {useAuth} from './components/common/AuthProvider.jsx';
 import {ProtectedRoute} from './components/common/ProtectedRoute.jsx'
 import AuthProvider from "./components/common/AuthProvider.jsx";
+import axios from 'axios'
 
 const router = createBrowserRouter([
     {
@@ -53,6 +53,10 @@ const router = createBrowserRouter([
 ]);
 
 function App(){
+
+    useEffect(() => {
+        axios.post("http://localhost:3000/api/auth/refresh");
+    }, []);
 
     return (
         <>

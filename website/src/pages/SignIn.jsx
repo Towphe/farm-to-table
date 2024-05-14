@@ -16,7 +16,7 @@ function SignIn(){
     const [missingEmail, setEmailAsMissing] = useState(false);
     const [missingPassword, setPasswordAsMissing] = useState(false);
     const [invalidCredentials, setCredentialsAsInvalid] = useState(false);
-    const {setToken, setRole, setExpiry} = useAuth();
+    const {setRole} = useAuth();
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -52,13 +52,8 @@ function SignIn(){
             email : loginData.email,
             password : loginData.password
         }).then((response) => {
-            // save token
-            setToken(response.data.accessToken);
             // save role
             setRole(response.data.role);
-            // create expiry date then store expiry datetime
-            const expiresIn = DateTime.now().plus({seconds: response.data.expiresIn});
-            setExpiry(expiresIn);
 
             // redirect to home page
             if (response.data.role === 'ADMIN'){
@@ -68,7 +63,6 @@ function SignIn(){
             }
             
         }).catch((err) => {
-            console.log(err);
             switch (err.response.status){
                 case 400:
                     // notify user of invalid credentials
