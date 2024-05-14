@@ -1,5 +1,17 @@
+import { useAuth } from "./AuthProvider";
+import {useNavigate} from 'react-router-dom';
 
 function AdminNavBar(){
+
+    const navigate = useNavigate();
+
+    const {signOut} = useAuth();
+
+    const signOut_ = () => {
+        signOut();
+        window.location.href = '/';
+    }
+
     const pages = [
         {name: "Home", route: "/admin"},
         {name: "Users", route: "/users"},
@@ -17,7 +29,8 @@ function AdminNavBar(){
                         return <a className="text-lg font-semibold hover:opacity-75" href={page.route} key={pages.indexOf(page)}>{page.name}</a>;
                     })
                 }
-                <a className="text-lg font-semibold hover:opacity-75" href="/sign-in">Sign in</a>
+                {/* <a className="text-lg font-semibold hover:opacity-75" href="/sign-in">Sign in</a> */}
+                <span className="text-lg font-semibold hover:opacity-75 hover:cursor-pointer" onClick={signOut_}>Sign Out</span>
             </div>
         </nav>
     )

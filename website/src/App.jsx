@@ -1,10 +1,7 @@
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import {
-    BrowserRouter,
-    Routes,
-    Route,
     createBrowserRouter,
     RouterProvider
 } from 'react-router-dom'
@@ -16,45 +13,67 @@ import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
 import Products from './pages/Products.jsx'
 import ProductDetail from './pages/ProductDetail.jsx'
+import {ProtectedRoute} from './components/common/ProtectedRoute.jsx'
+import AuthProvider from "./components/common/AuthProvider.jsx";
+import axios from 'axios'
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <CustomerRoot />,
+        children: [
+            {
+                path: '/',
+                element: <Homepage />
+            },
+            {
+                path: 'sign-in',
+                element: <SignIn />
+            },
+            {
+                path: 'sign-up',
+                element: <SignUp />
+            },
+            {
+                path: 'products',
+                element: <Products />
+            },
+            {
+                path: 'products/:code',
+                element: <ProductDetail/>
+            }
+        ]
+    },
+    {
+        path: '/admin',
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: '',
+                element: <AdminRoot />,
+                children: [
+                    {
+                        path: '',
+                        element: <h1>Admin placeholder 2</h1>
+                    }
+                ]
+            }
+        ]    // place other admin reltated routes here
+    }
+]);
 
 function App(){
 
-    const router = createBrowserRouter([
-        {
-            path: '/',
-            element: <CustomerRoot />,
-            children: [
-                {
-                    path: '/',
-                    element: <Homepage />
-                },
-                {
-                    path: 'sign-in',
-                    element: <SignIn />
-                },
-                {
-                    path: 'sign-up',
-                    element: <SignUp />
-                },
-                {
-                    path: 'products',
-                    element: <Products />
-                },{
-                    path: 'products/:code',
-                    element: <ProductDetail/>
-                }
-            ]
-        },
-        {
-            path: '/admin',
-            element: <AdminRoot />,
-            children: []    // place other admin reltated routes here
-        }
-    ]);
+    useEffect(() => {
+        axios.post("http://localhost:3000/api/auth/refresh");
+    }, []);
 
     return (
         <>
-            <RouterProvider router={router} />
+            {/* <RouterProvider router={router} /> */}
+            <AuthProvider>
+                <RouterProvider router={router} />
+            </AuthProvider>
         </>
     )
 }
