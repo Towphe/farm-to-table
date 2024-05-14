@@ -1,10 +1,10 @@
-import { openProduct, showProducts } from "../controllers/productController.js";
+import { retrieveProduct, retrieveProducts } from "../controllers/productController.js";
 
 const baseUrl = "/api/product";
 
 const productRouter = (app) =>{
-    app.get(`${baseUrl}/productInfo/:productId`, openProduct);
-    app.get(`${baseUrl}/showProducts`, showProducts)
+    app.get(`${baseUrl}/:productId`, retrieveProduct);
+    app.get(`${baseUrl}/`, retrieveProducts);
 }
 
 export default productRouter

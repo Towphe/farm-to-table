@@ -75,6 +75,27 @@ class ImageHandler{
         return fileUrls;
     }
 
+    async retrieveFirstImageFromFolder(from, id) {
+        let files = await cloudinary.api.resources({
+            type: 'upload',
+            prefix: `farm-to-table/${from}/${id}`
+        });
+
+        // const fileUrl = files.resources[0].map((file) => {
+        //     return {
+        //         assetId : file.asset_id,
+        //         url : file.url
+        //     }
+        // });
+        const fileUrl = files.resources[0];
+        console.log(fileUrl);
+
+        return {
+            assetId: fileUrl.asset_id,
+            url: fileUrl.url
+        };
+    }
+
     // function that deletes file from directory
     // NOTE: assetIds must be stored somewhere in page
     async deleteSingleFile(assetId){
