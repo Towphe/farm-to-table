@@ -52,17 +52,10 @@ function SignIn(){
             email : loginData.email,
             password : loginData.password
         }).then((response) => {
-            // save token
-            //setToken(response.data.accessToken);
             // save role
             setRole(response.data.role);
-            // create expiry date then store expiry datetime
-            const expiresIn = DateTime.now().plus({seconds: response.data.expiresIn});
-            //setExpiry(expiresIn);
-            console.log(response);
 
             // redirect to home page
-            // console.log(response.data.role);
             if (response.data.role === 'ADMIN'){
                 navigate("/admin", {replace: true})
             } else{
@@ -70,7 +63,6 @@ function SignIn(){
             }
             
         }).catch((err) => {
-            console.log(err);
             switch (err.response.status){
                 case 400:
                     // notify user of invalid credentials

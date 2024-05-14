@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import Cookie from 'js-cookie';
+import axios from "axios";
 
 const AuthContext = createContext();
 
@@ -15,6 +16,8 @@ const AuthProvider = ({ children }) => {
 
   const signOut = () =>{
     Cookie.remove('role');
+    axios.post("http://localhost:3000/api/auth/sign-out")
+      .catch((err) => console.log("Unhandled error."));
   }
 
 
