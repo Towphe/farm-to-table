@@ -7,7 +7,6 @@ import { useEffect } from "react";
 function AdminRoot(){
     const {role} = useAuth();
     const navigate = useNavigate();
-    
     useEffect(() => {
         if (role !== 'ADMIN'){
             

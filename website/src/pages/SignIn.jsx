@@ -16,7 +16,7 @@ function SignIn(){
     const [missingEmail, setEmailAsMissing] = useState(false);
     const [missingPassword, setPasswordAsMissing] = useState(false);
     const [invalidCredentials, setCredentialsAsInvalid] = useState(false);
-    const {setToken, setRole, setExpiry} = useAuth();
+    const {setRole} = useAuth();
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -53,14 +53,16 @@ function SignIn(){
             password : loginData.password
         }).then((response) => {
             // save token
-            setToken(response.data.accessToken);
+            //setToken(response.data.accessToken);
             // save role
             setRole(response.data.role);
             // create expiry date then store expiry datetime
             const expiresIn = DateTime.now().plus({seconds: response.data.expiresIn});
-            setExpiry(expiresIn);
+            //setExpiry(expiresIn);
+            console.log(response);
 
             // redirect to home page
+            // console.log(response.data.role);
             if (response.data.role === 'ADMIN'){
                 navigate("/admin", {replace: true})
             } else{

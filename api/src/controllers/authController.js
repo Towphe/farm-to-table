@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import bodyParser from "body-parser";
+import {DateTime} from 'luxon';
 
 await mongoose.connect(process.env.MONGO_KEY, {
     useNewUrlParser: true, useUnifiedTopology: true
@@ -51,14 +52,21 @@ const signup = async (req, res) => {
     // generate access token
     const accessToken = jwt.sign({userId: user._id, userType: user.userType}, accessTokenSecret, {expiresIn: '30m'});
     
+    // res.cookie('access_token', accessToken, {maxAge: 86400, httpOnly: true});
+    res.cookie('access_token', accessToken, {
+        httpOnly: true,
+        sameSite: 'None',
+        maxAge: 24 * 60 * 1000
+    });
     res.statusCode = 202;
-    res.send({'detail': 'Sign up success.', 'accessToken' : accessToken, 'role' : user.userType, 'expiresIn': TOKEN_EXPIRY_TIME});
+    //res.send({'detail': 'Sign up success.', 'accessToken' : accessToken, 'role' : user.userType, 'expiresIn': TOKEN_EXPIRY_TIME});
+    res.send({'detail': 'Sign up success.', 'role' : user.userType});   // only role is stored manually by client
 };
 
 // signs user in
 const signin = async (req, res) => {
     let user = await User.findOne({email: req.body.email});
-    
+
     // check if user exists
     if (user == null){
         res.statusCode = 400;
@@ -78,11 +86,14 @@ const signin = async (req, res) => {
     
     // generate access token
     const accessToken = jwt.sign({userId: user._id, userType: user.userType}, accessTokenSecret, {expiresIn: '30m'});
-    
-    console.log(jwt.verify(accessToken, accessTokenSecret));
 
+    res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        expires: DateTime.now().plus({days: 7}).toJSDate()
+    });
     res.statusCode = 202;
-    res.send({'detail': 'Sign in success.',  'accessToken' : accessToken, 'role' : user.userType, 'expiresIn': TOKEN_EXPIRY_TIME});
+    //res.send({'detail': 'Sign up success.', 'accessToken' : accessToken, 'role' : user.userType, 'expiresIn': TOKEN_EXPIRY_TIME});
+    res.send({'detail': 'Sign up success.', 'role' : user.userType});   // only role is stored manually by client
 }
 
 const test = (req, res) => {
