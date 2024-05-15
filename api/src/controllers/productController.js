@@ -24,6 +24,14 @@ const Product = mongoose.model('Product', {
     image_url: String
 });
 
+const ShoppingCart = mongoose.model('ShoppingCart', {
+    userId: String,
+    productName: String,
+    productId: String,
+    price: Number,
+    quantity: Number
+});
+
 const retrieveProduct = async (req, res) => {
     const product = await Product.findById(req.params.productId);
 
@@ -51,4 +59,17 @@ const retrieveProducts = async (req, res) => {
     });
 }
 
-export{retrieveProduct, retrieveProducts};
+const saveToCart = async (req, res) => {
+
+    await ShoppingCart.create({
+        userId: req.user.userId,
+        productName: req.body.productName,
+        productId: req.body.productId,
+        price: req.body.price,
+        quantity: req.body.quantity
+    });
+
+    return res.json({detail: `Added to cart.`});
+}
+
+export{retrieveProduct, retrieveProducts, saveToCart};

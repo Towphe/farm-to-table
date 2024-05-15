@@ -52,13 +52,15 @@ const signup = async (req, res) => {
     res.cookie('accessToken', accessToken, {
         httpOnly: true,
         sameSite: 'None',
-        maxAge: 1 * 30 * 1000
+        secure: true,
+        maxAge: 1 * 30 * 60 * 1000
     });
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         sameSite: 'None',
-        maxAge: 24 * 60 * 1000
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000
     });
     res.statusCode = 202;
     
@@ -93,17 +95,19 @@ const signin = async (req, res) => {
     res.cookie('accessToken', accessToken, {
         httpOnly: true,
         sameSite: 'None',
-        maxAge: 1 * 30 * 1000
+        secure: true,
+        maxAge: 1 * 30 * 60 * 1000
     });
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         sameSite: 'None',
-        maxAge: 24 * 60 * 1000
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000
     });
     res.statusCode = 202;
 
-    res.send({'detail': 'Sign up success.', 'role' : user.userType});   // only role is stored manually by client
+    res.send({'detail': 'Sign in success.', 'role' : user.userType});   // only role is stored manually by client
 }
 
 // refreshes access token
@@ -125,7 +129,8 @@ const refreshToken = async (req, res) => {
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             sameSite: 'None',
-            maxAge: 1 * 30 * 1000
+            secure: true,
+            maxAge: 1 * 30 * 60 * 1000
         });
     })
     res.statusCode = 202;
@@ -136,7 +141,6 @@ const refreshToken = async (req, res) => {
 const signOut = (req, res) => {
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
-    res.end();
 
     res.statusCode = 202;
     return res.json({detail: 'Successfully logged out'});

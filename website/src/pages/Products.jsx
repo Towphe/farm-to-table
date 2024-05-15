@@ -19,6 +19,22 @@ function Products(){
           .catch(error => console.error('Error fetching products:', error));
       }, []);
 
+      const addToCart = async (e) => {
+        
+        const productId = e.target.getAttribute('data-product-id').split("-")[1];
+        const product = products.filter((p) => p._id == productId)[0];
+        
+        await axios.post(`http://localhost:3000/api/product/add-to-cart`, {
+          productName: product.name,
+          productId: product._id,
+          price: product.price,
+          quantity: product.quantity
+        }, {withCredentials: true}).then(res => {
+          // add pop notif that item has been added to cart later
+          console.log("Added to cart.")
+        });
+      };
+
       return (
         // <main className="relative flex flex-col w-full h-full justify-center items-center">
         <main className="relative w-full h-full overflow-x-hidden">
@@ -33,7 +49,7 @@ function Products(){
                   </span>
                   <span>P{product.price}</span>
                 </div>
-                <button className='shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2'>Add to Cart</button>
+                <button data-product-id={"button-" + product._id} onClick={addToCart} className='shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2 hover:opacity-75'>Add to Cart</button>
               </div>
             ))}
           </div>

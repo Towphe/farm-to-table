@@ -12,6 +12,8 @@ function SignIn(){
         email: '',
         password: ''
     });
+    
+    axios.defaults.withCredentials = true;
 
     const [missingEmail, setEmailAsMissing] = useState(false);
     const [missingPassword, setPasswordAsMissing] = useState(false);
@@ -51,6 +53,8 @@ function SignIn(){
         await axios.post('http://localhost:3000/api/auth/sign-in', {
             email : loginData.email,
             password : loginData.password
+        }, {
+            withCredentials: true
         }).then((response) => {
             // save role
             setRole(response.data.role);

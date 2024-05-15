@@ -23,6 +23,16 @@ function ProductDetail() {
       .catch(error => console.error('Error fetching product details:', error));
   }, []);
 
+  const addToCart = async () => {
+    
+    await axios.post(`http://localhost:3000/api/product/add-to-cart`, {
+      productName: req.body.productName,
+      productId: req.body.productId,
+      price: req.body.price,
+      quantity: req.body.quantity
+    }).then(res => console.log("Added to cart."));
+  }
+
 
   return (
     <main  className="flex flex-col w-full h-full justify-center items-center">
@@ -37,7 +47,7 @@ function ProductDetail() {
           </div>
           <p>{product.description}</p>
           {product.quantity === 0 ? <p className='text-red-500'>Out of stock</p> : <></>}
-          <button className='shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2'>Add to Cart</button>
+          <button onClick={addToCart} key={product._id} className='shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2'>Add to Cart</button>
         </div>
     </main>
   );
