@@ -27,7 +27,7 @@ const signup = async (req, res) => {
     let user = await User.findOne({email: req.body.email});
     
     // check if user exists
-    if (user != null){
+    if (user){
         res.statusCode = 400;
         res.send({'detail' : 'Email is already taken.'})
         return;
@@ -62,7 +62,7 @@ const signup = async (req, res) => {
         secure: true,
         maxAge: 24 * 60 * 60 * 1000
     });
-    res.statusCode = 202;
+    res.statusCode = 200;
     
     res.send({'detail': 'Sign up success.', 'role' : user.userType});   // only role is stored manually by client
 };
