@@ -8,7 +8,6 @@ import fileUpload from 'express-fileupload';
 import cookieParser from'cookie-parser';
 const app = express();
 const port = process.env.PORT;  // place this on secrets later
-app.use(cors({origin:true, credentials:true}));
 
 app.use(cors({origin:true, credentials:true}));
 app.use(express.json());

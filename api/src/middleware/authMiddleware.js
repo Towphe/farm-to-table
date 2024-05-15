@@ -2,13 +2,13 @@ import jwt from 'jsonwebtoken';
 
 const authenticateJWT = (req, res, next) => {
     const accessToken = req.cookies.accessToken;
-    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+    // console.log(req.secureCookies);
     // check first if cookie exists
     if (accessToken){
-        const token = accessToken.split(' ')[1]; // format: ['Bearer', '<token here>']
-        jwt.verify(token, accessTokenSecret, (err, user) => {
+        jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
             if (err) {
-                return res.sendStatus(403);
+                res.statusCode = 403;
+                return res.send(err)
             }
             // re-checked expiry date in case
             // get expiry date in iso format

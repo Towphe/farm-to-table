@@ -8,7 +8,7 @@ const authRouter = (app) => {
     app.post(`${baseUrl}/sign-in`, signin)
     app.post(`${baseUrl}/refresh`, refreshToken);
     app.get(`${baseUrl}/test`, authenticateJWT, test);
-    app.post(`${baseUrl}/sign-out`, signOut);
+    app.post(`${baseUrl}/sign-out`, authenticateJWT, signOut);
 };
 
 export default authRouter;
