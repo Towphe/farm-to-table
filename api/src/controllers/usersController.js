@@ -15,12 +15,8 @@ const viewUser = async (req, res) => {
         res.statusCode = 403;
         return res.send({detail: 'Unauthorized access'});
     }
-
-    try{
-        res.send( await User.find({}));
-    }catch(error){
-        res.status(501).json([]);
-    }
+    
+    res.send( await User.find({}));
 }
 
 
@@ -29,16 +25,11 @@ const updateUser = async (req, res) => {
         res.statusCode = 403;
         return res.send({detail: 'Unauthorized access'});
     }
-    
+
     const userId = req.user.userId;
     const update = req.body;
-
-    try{
-        res.send( await User.findByIdAndUpdate(userId, update));
-
-    }catch{
-        res.status(501).json([]);
-    }
+    
+    res.send( await User.findByIdAndUpdate(userId, update));
 }
 
 export {index, viewUser, updateUser}

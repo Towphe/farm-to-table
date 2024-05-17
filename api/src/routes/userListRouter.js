@@ -1,4 +1,4 @@
-import { viewUser } from '../controllers/userController.js';
+import { viewUser } from '../controllers/usersController.js';
 import { authenticateJWT } from '../middleware/authMiddleware.js'
 
 const userListRouter = (app) =>{
