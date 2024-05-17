@@ -70,7 +70,7 @@ const signup = async (req, res) => {
 // signs user in
 const signin = async (req, res) => {
     let user = await User.findOne({email: req.body.email});
-
+    
     // check if user exists
     if (user == null){
         res.statusCode = 400;
