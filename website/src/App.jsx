@@ -17,6 +17,8 @@ import {ProtectedRoute} from './components/common/ProtectedRoute.jsx'
 import AuthProvider from "./components/common/AuthProvider.jsx";
 import axios from 'axios'
 import OrdersList from './pages/OrdersList.jsx'
+import CheckoutView from './pages/CheckoutView.jsx'
+import OrderSuccess from './pages/SuccessView.jsx'
 
 const router = createBrowserRouter([
     {
@@ -46,15 +48,15 @@ const router = createBrowserRouter([
             {
                 path: 'orders',
                 element: <OrdersList/>
+            },
+            {
+                path: 'checkout',
+                element: <CheckoutView/>
+            },
+            {
+                path: 'success',
+                element: <OrderSuccess/>
             }
-            // {
-            //     path: 'checkout-view',
-            //     element: <CheckoutView/>
-            // },
-            // {
-            //     path: 'success-view',
-            //     element: <SuccessView/>
-            // }
         ]
     },
     {
