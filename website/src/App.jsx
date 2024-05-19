@@ -12,13 +12,14 @@ import SignUp from './pages/Signup.jsx'
 import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
 import Products from './pages/Products.jsx'
+import OrdersList from './pages/OrdersList.jsx'
+import CheckoutView from './pages/CheckoutView.jsx'
+import OrderSuccess from './pages/SuccessView.jsx'
 import ProductDetail from './pages/ProductDetail.jsx'
 import {ProtectedRoute} from './components/common/ProtectedRoute.jsx'
 import AuthProvider from "./components/common/AuthProvider.jsx";
 import axios from 'axios'
-import OrdersList from './pages/OrdersList.jsx'
-import CheckoutView from './pages/CheckoutView.jsx'
-import OrderSuccess from './pages/SuccessView.jsx'
+
 
 const router = createBrowserRouter([
     {
