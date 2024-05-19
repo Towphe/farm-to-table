@@ -4,11 +4,25 @@ import {Link} from 'react-router-dom';
 
 function OrdersList()
 {
+    const [orders, setOrders] = useState([]);
+    const [pageCount, setPageCount] = useState();
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/api/order/ordered-items')
+          .then(response => 
+          {
+            setOrders(response.data.orders);
+            setPageCount(response.data.pages)
+          })
+          .catch(error => console.error('Error fetching items ordered:', error));
+      }, []);
+      return (
+      );
 };
 
 export default OrdersList;
 
-const itemsordered = 
+const itemsOrdered = 
 [
     { 
       name: "Hanabishi Ground Fan Hurricane", 
