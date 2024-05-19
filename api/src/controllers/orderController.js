@@ -101,4 +101,27 @@ const createOrder = async (req, res) =>
     return res.json({ message: 'Order Created.'});
 };
 
-export{ findOrder, listOrders, createOrder };
+const confirmOrder = async (req, res) => 
+{
+    const orderId = req.params.transactionId;
+    const orderStatus = req.params.status;
+
+    if (orderStatus !== 1) return res.status(405).send({ error: 'Invalid order status.' });
+    
+    const order = await OrderTransaction.findOneAndUpdate(
+        { _id: orderId }, 
+        { $set: {orderStatus: 1} },
+        { new: true }
+    );
+
+    if (!order) return res.status(404).send({ error: 'Order not found.' });
+
+    res.send(
+    {
+        message: "Order confirmed successfully.",
+        createdAt: order.createdAt,
+        orderId: order._id
+    });
+};
+
+export{ findOrder, listOrders, createOrder, confirmOrder };
