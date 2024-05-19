@@ -61,13 +61,14 @@ function ShoppingCart() {
                                 <Link to={`/products/${product._id}`}>{product.productName}</Link>
                                 <span className="text-gray-600 text-opacity-60 text-sm">{product.quantity}kg</span>
                             </span>
-                            <span className="flex flex-row">P {product.totalPrice}</span>
+                            <span className="flex flex-row">P{product.totalPrice}</span>
                         </div>
                         <span>
                             <button onClick={() => handleDelete(product.productName)} className="text-red-500">Delete</button>
                         </span>
                     </div>
                 ))}
+                <button className="flex justify-center items-center w-80 p-3 rounded-full shadow-sm bg-green-700 text-off-white text-2xl font-bold"> Checkout</button>
             </div>
         </main>
     );
