@@ -72,4 +72,18 @@ const saveToCart = async (req, res) => {
     return res.json({detail: `Added to cart.`});
 }
 
-export{retrieveProduct, retrieveProducts, saveToCart};
+const retrieveItem = async (req, res) => {
+    try {
+        const products = await ShoppingCart.find();  // Assuming ShoppingCart is your model for cart items
+        res.json({ products, pages: 1 });  // Adjust pages based on your logic
+    } catch (error) {
+        console.error('Error retrieving cart items:', error);
+        res.status(500).json({ detail: 'Internal server error' });
+    }
+};
+
+const deleteItem = async (req,res) => {
+    res.send(await ShoppingCart.deleteOne({productName: req.query.productName}))
+}
+
+export{retrieveProduct, retrieveProducts, saveToCart, retrieveItem, deleteItem};
