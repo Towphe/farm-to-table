@@ -26,10 +26,10 @@ function ProductDetail() {
   const addToCart = async () => {
     
     await axios.post(`http://localhost:3000/api/product/add-to-cart`, {
-      productName: req.body.productName,
-      productId: req.body.productId,
-      price: req.body.price,
-      quantity: req.body.quantity
+      productName: product.name,
+      productId: product._id,
+      price: product.price,
+      quantity: product.quantity
     }).then(res => console.log("Added to cart."));
   }
 
