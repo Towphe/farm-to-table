@@ -13,6 +13,7 @@ import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
 import Products from './pages/Products.jsx'
 import ProductDetail from './pages/ProductDetail.jsx'
+import ProductInfo from './pages/ProductInfo.jsx'
 import ShoppingCart from './pages/ShoppingCart.jsx'
 import ProductList from './pages/ProductList.jsx'
 import {ProtectedRoute} from './components/common/ProtectedRoute.jsx'
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
                     {
                         path: 'products',
                         element: <ProductList/>
+                    },
+                    {
+                        path: 'products/:code',
+                        element: <ProductInfo/>
                     }
                 ]
             },

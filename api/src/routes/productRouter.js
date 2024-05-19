@@ -8,6 +8,7 @@ const productRouter = (app) =>{
     app.get(`${baseUrl}/`, retrieveProducts);
     app.get(`/api/Shopping-Cart`, retrieveItem, deleteItems);
     app.get(`/api/admin/products`, retrieveProducts);
+    app.get(`/api/admin/products/:productId`, retrieveProduct);
     app.post(`${baseUrl}/add-to-cart`, authenticateJWT, saveToCart)
 
 }
