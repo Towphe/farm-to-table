@@ -10,7 +10,7 @@ function ProductList(){
     const [pageCount, setPageCount] = useState();
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/admin/productList')
+        axios.get('http://localhost:3000/api/admin/products')
           .then(response => {
             setProducts(response.data.products);
             setPageCount(response.data.pages)
@@ -49,7 +49,6 @@ function ProductList(){
                   </span>
                   <span>P{product.price}</span>
                 </div>
-                <button data-product-id={"button-" + product._id} onClick={addToCart} className='shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2 hover:opacity-75'>Add to Cart</button>
               </div>
             ))}
           </div>

@@ -82,8 +82,18 @@ const retrieveItem = async (req, res) => {
     }
 };
 
-const deleteItem = async (req,res) => {
-    res.send(await ShoppingCart.deleteOne({productName: req.query.productName}))
-}
+const deleteItems = async (req, res) => {
+    try {
+        const productName = req.query.productName;
+        const result = await ShoppingCart.deleteMany({ productName: productName });
+        if (result.deletedCount > 0) {
+            res.status(200).send({ message: "Items deleted successfully" });
+        } else {
+            res.status(404).send({ message: "No items found to delete" });
+        }
+    } catch (error) {
+        res.status(500).send({ message: "Error deleting items", error });
+    }
+};
 
-export{retrieveProduct, retrieveProducts, saveToCart, retrieveItem, deleteItem};
+export{retrieveProduct, retrieveProducts, saveToCart, retrieveItem, deleteItems};

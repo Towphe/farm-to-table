@@ -60,13 +60,13 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: '',
-                        element: <h1>Admin placeholder 2</h1>
-                    },
-                    {
-                        path: 'productList',
-                        element: <ProductList/>
+                        element: <h1>Admin Placeholder 2</h1>
                     }
                 ]
+            },
+            {
+                path: 'products',
+                element: <ProductList/>
             }
         ]    // place other admin reltated routes here
     }

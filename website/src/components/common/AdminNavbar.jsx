@@ -15,7 +15,7 @@ function AdminNavBar(){
     const pages = [
         {name: "Home", route: "/admin"},
         {name: "Users", route: "/users"},
-        {name: "Products", route: "/products"},
+        {name: "Products", route: "/admin/products"},
         {name: "Orders", route: "/orders"},
         {name: "Reports", route: "/reports"}
     ];
