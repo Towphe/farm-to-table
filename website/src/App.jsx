@@ -61,13 +61,14 @@ const router = createBrowserRouter([
                     {
                         path: '',
                         element: <h1>Admin Placeholder 2</h1>
+                    },
+                    {
+                        path: 'products',
+                        element: <ProductList/>
                     }
                 ]
             },
-            {
-                path: 'products',
-                element: <ProductList/>
-            }
+
         ]    // place other admin reltated routes here
     }
 ]);
