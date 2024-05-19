@@ -23,21 +23,31 @@ function ProductInfo() {
       .catch(error => console.error('Error fetching product details:', error));
   }, []);
 
+  const productDetails = [
+    { label: "ID", value: product._id },
+    { label: "Product Name", value: product.name },
+    { label: "Product Type", value: product.type },
+    { label: "Product Description", value: product.description },
+    { label: "Product Quantity", value: product.quantity }
+  ];
+
   return (
     <main  className="flex flex-col w-full h-full justify-center items-center">
-        <h1 className="w-screen h-auto text-center absolute top-20 block m-6 font-bold text-2xl">Product Information</h1>
+        <h1 className="w-screen h-auto text-center block m-14 font-bold text-2xl">Product Details</h1>
         <div className='md:ml-10 flex place-self-start'>
-            <Link to="/products" className='m-5 shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2 absolute top-20'>Go Back</Link>
+            <Link to="/admin/products" className='m-5 shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2 absolute top-20'>Go Back</Link>
         </div>
         <img className='shadow-lg' src={product.image_url} />
-        <div className="p-4 rounded-lg flex flex-col flex-shrink-0 shadow-md rounded-t-md space-y-3 m-5 ">
-          
-          <div className="flex justify-between w-full p-1 g-3 space-x-10 font-bold text-2xl">       
-            <span>{product.name}</span>
-            <span>P{product.price}</span>
-          </div>
-          <p>{product.description}</p>
-          {product.quantity === 0 ? <p className='text-red-500'>Out of stock</p> : <></>}
+        <div className="p-7 rounded-lg flex flex-col flex-shrink-0 shadow-md rounded-t-3xl space-y-2 border-2 border-solid bg-gray-400 bg-opacity-10 m-5  border-black">
+          <span className='flex place-self-center font-bold text-1xl'>
+            Product Information
+            </span>
+        {productDetails.map((detail, index) => (
+        <span key={index} className="flex justify-between w-full p-1 space-x-10">
+            <span>{detail.label}:</span>
+            <span>{detail.value}</span>
+        </span>
+        ))}
         </div>
     </main>
   );
