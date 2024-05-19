@@ -23,7 +23,7 @@ function ProductList(){
       return (
         // <main className="relative flex flex-col w-full h-full justify-center items-center">
         <main className="relative w-full h-full overflow-x-hidden gap-6 mt-10">
-            <h1 className="w-screen h-auto text-center absolute top-4 block m-4 font-bold text-3xl">Shopping Cart</h1>
+            <h1 className="w-screen h-auto text-center absolute top-4 block m-4 font-bold text-2xl">Product List</h1>
             <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-3 md:flex-col justify-center mt-24">
                 {products.map((product) => (
                     <div key={product._id} className="flex flex-col text-m flex-shrink-0 items-center justify-center shadow-md rounded-t-md border-black-50 bg-opacity-40 bg-green-300 p-2">
@@ -32,16 +32,21 @@ function ProductList(){
                                 <span>Product Id: {product._id}</span>
                             </span>                            
                             <span>
-                            <Link to={`/products/${product._id}`}>
+                            
                                 <button className="flex items-center gap-2 text-text-orange-500">
+                                  <Link to={`/admin/products/${product._id}`}>
                                     Show More
+                                  </Link>
                                 </button>
-                            </Link>
+
                             </span>
                         </div>
                     </div>
                 ))}
             </div>
+            <ul className="absolute w-screen text-center bottom-16 text-x3">
+            {Array.from({length: pageCount}, (v, k) => k+1).map((n) => <li key={n}><Link to="/admin/product">{n}</Link></li>)}
+            </ul>
         </main>
       );
     }
