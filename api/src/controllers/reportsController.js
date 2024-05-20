@@ -17,7 +17,6 @@ await mongoose.connect(process.env.MONGO_KEY, {
 // 2. get number of orders (confirmed & unconfirmed)
 
 const retrieveBasicReport = async (req, res) => {
-    // const validBy = ['week', 'month', 'year']
     let days;
 
     let by = req.query.by;
@@ -109,25 +108,16 @@ const retrieveBasicReport = async (req, res) => {
 
     // get top 10 products
     let sortedTally = [];
-    // for (var product in productTally)    {
-    //     sortedTally.push([productTally[product].name, productTally[product].count]);
-    // }
-
-    // sortedTally.sort((a, b) => {
-    //     return b[1] - a[1]
-    // })
     for (var product in productTally)    {
         sortedTally.push({id: product, name: productTally[product].name, count: productTally[product].count});
     }
 
     sortedTally.sort((a, b) => {
-        // return b[1] - a[1]
         return b.count - a.count;
     })
 
 
     return res.send({
-        // orders: orders,
         productTally: sortedTally.slice(0,10),
         orderTally: {
             pending: pendingOrders,
