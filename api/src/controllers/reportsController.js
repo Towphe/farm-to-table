@@ -20,12 +20,10 @@ const retrieveBasicReport = async (req, res) => {
     // const validBy = ['week', 'month', 'year']
     let days;
 
-    // ISSUE HERE
     let by = req.query.by;
-    console.log(req.query.by);
-    console.log(by);
 
     let sales = [];    // initialized reports to return
+    let productTally = {};
     let totalIncome = 0;
     let pendingOrders = 0;
     let completedOrders = 0;
@@ -77,21 +75,64 @@ const retrieveBasicReport = async (req, res) => {
     ]);
     
     orders.map((order) => {
-        // get total price
-        totalIncome += order.totalPrice;
+        // tally products
+        // producTally element: {id: "", name: "", count: `n`}
+        // productTally.map((product) => {
+        //     if (product.name === order.)
+        // })
+        order.items.map((product) => {
+            if (productTally[product.detail[0]._id] === undefined){
+                // product not yet in tally
+                productTally[product.detail[0]._id] = {
+                    name: product.detail[0].name,
+                    count: 1
+                };
+            } else{
+                // product already in tally
+                productTally[product.detail[0]._id].count += 1;
+            }
+        });
 
         // get order count
-        if (order.status === 0) pendingOrders += 1    // pending
-        else if (order.status === 1) completedOrders += 1     // completed
-        else if (order.status === 2) cancelledOrders += 1     // cancelled
+        if (order.status === 0){ // pending
+            pendingOrders += 1
+        }
+        else if (order.status === 1){     // completed
+            completedOrders += 1;
+            totalIncome += order.totalIncome;
+        }
+        else if (order.status === 2){   // cancelled
+            cancelledOrders += 1;
+            totalIncome -= order.totalPrice;
+        }
     });
 
+    // get top 10 products
+    let sortedTally = [];
+    // for (var product in productTally)    {
+    //     sortedTally.push([productTally[product].name, productTally[product].count]);
+    // }
+
+    // sortedTally.sort((a, b) => {
+    //     return b[1] - a[1]
+    // })
+    for (var product in productTally)    {
+        sortedTally.push({id: product, name: productTally[product].name, count: productTally[product].count});
+    }
+
+    sortedTally.sort((a, b) => {
+        // return b[1] - a[1]
+        return b.count - a.count;
+    })
+
+
     return res.send({
-        orders: orders,
-        orderCount: {
-            pendingOrders: pendingOrders,
-            completedOrders: completedOrders,
-            cancelledOrders: cancelledOrders
+        // orders: orders,
+        productTally: sortedTally.slice(0,10),
+        orderTally: {
+            pending: pendingOrders,
+            completed: completedOrders,
+            cancelled: cancelledOrders
         },
         income: totalIncome
     });
