@@ -11,6 +11,7 @@ import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/Signup.jsx'
 import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
+import AddProduct from './pages/AddProduct.jsx'
 import Products from './pages/Products.jsx'
 import ProductDetail from './pages/ProductDetail.jsx'
 import ProductInfo from './pages/ProductInfo.jsx'
@@ -76,6 +77,11 @@ const router = createBrowserRouter([
                     {
                         path: 'reports',
                         element: <Reports />
+                    }
+                    ,
+                    {
+                        path: 'add-products',
+                        element: <AddProduct/>
                     }
                 ]
             },

@@ -7,10 +7,12 @@ const adminUrl = "/api/admin/products";
 
 const productRouter = (app) =>{
     app.get(`${baseUrl}/:productId`, retrieveProduct);
+    app.get(`${adminUrl}/:productId`, retrieveProduct);
     app.get(`${baseUrl}/`, retrieveProducts);
     app.get(`${cartUrl}`, authenticateJWT, retrieveCart);
     app.delete(`${cartUrl}/:itemId`, authenticateJWT, deleteItems);
     app.post(`${cartUrl}`, authenticateJWT, saveToCart);
+    app.post(`$`)
 };
 
 export default productRouter
