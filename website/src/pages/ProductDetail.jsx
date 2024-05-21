@@ -28,7 +28,7 @@ function ProductDetail() {
     await axios.post(`http://localhost:3000/api/product/add-to-cart`, {
       productName: product.name,
       productId: product._id,
-      price: product.price,
+      price: product.price['$numberDecimal'],
       quantity: product.quantity
     }).then(res => console.log("Added to cart."));
   }

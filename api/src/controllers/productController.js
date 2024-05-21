@@ -50,6 +50,20 @@ const retrieveProducts = async (req, res) => {
     });
 }
 
+const addProduct = async (req, res) => {
+    const { name, description, type, quantity, unit, price, image_url} =  req.body;
+    const newProduct = new Product({
+        name, description, type, quantity, unit, price, image_url
+    })
+
+    try {
+        await newProduct.save();
+        res.json({inserted: true});
+    } catch (error){
+        res.json({inserted: false});
+    }
+}
+
 const saveToCart = async (req, res) => {
 
     await ShoppingCart.create({
@@ -85,4 +99,4 @@ const deleteItems = async (req, res) => {
     return res.sendStatus(200);
 };
 
-export{retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems};
+export{retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems, addProduct};
