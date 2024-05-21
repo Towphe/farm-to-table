@@ -96,4 +96,12 @@ const retrieveCart = async (req, res) => {
     return res.send(cartItems);
 };
 
+const deleteItems = async (req, res) => {
+    const itemId = req.params.itemId;
+
+    const resu = await ShoppingCart.findByIdAndDelete(itemId);
+    
+    return res.sendStatus(200);
+};
+
 export{retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems};
