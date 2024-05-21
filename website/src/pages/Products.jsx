@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import {Link} from 'react-router-dom';
 
-//const products = [{code: 'Luya', Image: 'https://assets.epicurious.com/photos/58d3fed8e2c8295cfbf4a52f/master/pass/ginger_root_pile_23032017.jpg', desc:'420.69'}, {code: 'Patatas', Image: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQL10SiAaQxje_j6zT5Wlg92SOv9XfExLMkhEHxrJM-lN_7LBL9', desc:'420.69'}, {code:'Repolyo', Image: 'https://static.toiimg.com/thumb/resizemode-4,width-1280,height-720,msid-97704047/97704047.jpg', desc:'420.69'}]
-
 function Products(){
 
     const [products, setProducts] = useState([]);
@@ -61,7 +59,7 @@ function Products(){
             </div>        
           </div>
           <ul className="absolute w-screen text-center bottom-4 text-xl">
-            {Array.from({length: pageCount}, (v, k) => k+1).map((n) => <li key={n}><Link to="/product">{n}</Link></li>)}
+            {Array.from({length: pageCount}, (v, k) => k+1).map((n) => <li key={n}><Link to={`/products?p=${n}&c=${10}`}>{n}</Link></li>)}
           </ul>
         </main>
       );
