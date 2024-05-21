@@ -28,7 +28,7 @@ function Products(){
         const productId = e.target.getAttribute('data-product-id').split("-")[1];
         const product = products.filter((p) => p._id == productId)[0];
         
-        await axios.post(`http://localhost:3000/api/product/add-to-cart`, {
+        await axios.post(`http://localhost:3000/api/shopping-cart`, {
           productName: product.name,
           productId: product._id,
           price: product.price,

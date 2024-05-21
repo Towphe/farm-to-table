@@ -25,6 +25,7 @@ function CustomerNavBar(){
                         return <a className="text-lg font-semibold hover:opacity-75" href={page.route} key={pages.indexOf(page)}>{page.name}</a>;
                     })
                 }
+                {!role ? <></> : <a className="text-lg font-semibold hover:opacity-75" href="/shopping-cart" key={4}>Cart</a>}
                 {!role ? <a className="text-lg font-semibold hover:opacity-75" href="/sign-in">Sign in</a> : <span className="text-lg font-semibold hover:opacity-75 hover:cursor-pointer" onClick={signOut_}>Sign Out</span>}
             </div>
         </nav>
