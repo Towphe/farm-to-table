@@ -57,7 +57,7 @@ const saveToCart = async (req, res) => {
         productName: req.body.productName,
         productId: req.body.productId,
         price: new mongoose.Types.Decimal128(req.body.price.toString()),
-        quantity: req.body.quantity
+        quantity: 1
     });
 
     const product = await Product.findOneAndUpdate(
