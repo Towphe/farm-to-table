@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function AddProduct() {
@@ -10,6 +9,7 @@ function AddProduct() {
         "quantity": "",
         "type": "",
         "unit": "",
+        "image_url": ""
     });
 
     const [message, setMessage] = useState('');
@@ -33,15 +33,16 @@ function AddProduct() {
             type: details.type,
             price: details.price,
             quantity: details.quantity,
-            unit: details.unit 
-        });
+            unit: details.unit,
+            image_url: details.url
+        }, console.log("added to cart"));
         setMessage('Product added successfully!');
    }
 
    return(
         <main className="relative w-full h-full overflow-x-hidden gap-6 mt-10">
-            <h1 className="w-screen h-auto text-center block p-10 font-bold text-2xl">Add New Product</h1>
-            <div className="w-screen h-auto flex flex-col items-center gap-6 md:flex-col justify-center mt-6">
+            <h1 className="w-screen h-auto text-center block p-4 font-bold text-2xl">Add New Product</h1>
+            <div className="w-screen h-auto flex flex-col items-center gap-4 md:flex-col justify-center mt-6">
                 <form onSubmit={submitProduct} className="w-full max-w-lg p-4 shadow-md rounded-md bg-white">
                 <div className="mb-1 p-6">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
@@ -75,7 +76,7 @@ function AddProduct() {
                         </label>
                         <input
                             type="text"
-                            name="description"
+                            name="type"
                             value={details.type}
                             onChange={handleChange}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -108,7 +109,7 @@ function AddProduct() {
                             required
                         />
                 </div>
-                <div className="mb-1 p-6">
+                <div className="mb-1 px-6">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
                             Unit of Measurement
                         </label>
@@ -121,9 +122,25 @@ function AddProduct() {
                             required
                         />
                 </div>
+                <div className="mb-1 p-6">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                            Image URL of Product
+                        </label>
+                        <input
+                            type="text"
+                            name="image_url"
+                            value={details.url}
+                            onChange={handleChange}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            required
+                        />
+                </div>
+                <button onClick={submitProduct} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Add Product
+                </button>
                 </form>
             </div>
-
+             {message && <p className="mt-4 text-center text-red-500">{message}</p>}
         </main>
    )
 }
