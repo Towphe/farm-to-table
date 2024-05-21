@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import ImageHandler from '../util/imageHandler.js'
 
 await mongoose.connect(process.env.MONGO_KEY, {
@@ -25,10 +25,10 @@ const Product = mongoose.model('Product', {
 });
 
 const ShoppingCart = mongoose.model('ShoppingCart', {
-    userId: String,
+    userId: mongoose.Types.ObjectId,
     productName: String,
-    productId: String,
-    price: Number,
+    productId: mongoose.Types.ObjectId,
+    price: mongoose.Types.Decimal128,
     quantity: Number
 });
 
@@ -65,35 +65,27 @@ const saveToCart = async (req, res) => {
         userId: req.user.userId,
         productName: req.body.productName,
         productId: req.body.productId,
-        price: req.body.price,
+        price: new mongoose.Types.Decimal128(req.body.price.toString()),
         quantity: req.body.quantity
     });
 
     return res.json({detail: `Added to cart.`});
 }
 
-const retrieveItem = async (req, res) => {
-    try {
-        const products = await ShoppingCart.find();  // Assuming ShoppingCart is your model for cart items
-        res.json({ products, pages: 1 });  // Adjust pages based on your logic
-    } catch (error) {
-        console.error('Error retrieving cart items:', error);
-        res.status(500).json({ detail: 'Internal server error' });
-    }
+const retrieveCart = async (req, res) => {
+    const cartItems = await ShoppingCart.find({
+        userId: req.user.userId
+    });
+
+    return res.send(cartItems);
 };
 
 const deleteItems = async (req, res) => {
-    try {
-        const productName = req.query.productName;
-        const result = await ShoppingCart.deleteMany({ productName: productName });
-        if (result.deletedCount > 0) {
-            res.status(200).send({ message: "Items deleted successfully" });
-        } else {
-            res.status(404).send({ message: "No items found to delete" });
-        }
-    } catch (error) {
-        res.status(500).send({ message: "Error deleting items", error });
-    }
+    const itemId = req.params.itemId;
+
+    const resu = await ShoppingCart.findByIdAndDelete(itemId);
+    
+    return res.sendStatus(200);
 };
 
-export{retrieveProduct, retrieveProducts, saveToCart, retrieveItem, deleteItems};
+export{retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems};
