@@ -19,6 +19,7 @@ import ProductList from './pages/ProductList.jsx'
 import {ProtectedRoute} from './components/common/ProtectedRoute.jsx'
 import AuthProvider from "./components/common/AuthProvider.jsx";
 import axios from 'axios'
+import Reports from './pages/Reports.jsx'
 
 const router = createBrowserRouter([
     {
@@ -70,6 +71,11 @@ const router = createBrowserRouter([
                     {
                         path: 'products/:code',
                         element: <ProductInfo/>
+                    }
+                    ,
+                    {
+                        path: 'reports',
+                        element: <Reports />
                     }
                 ]
             },

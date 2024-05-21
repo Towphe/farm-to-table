@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser';
 import authRouter from './routes/authRouter.js';
 import productRouter from './routes/productRouter.js'
+import reportRouter from './routes/reportRouter.js';
 import cors from 'cors';
 import testRouter from './routes/testRouter.js';
 import fileUpload from 'express-fileupload';
@@ -21,7 +22,7 @@ app.use(cookieParser());
 authRouter(app);
 productRouter(app);
 testRouter(app);
-
+reportRouter(app);
 
 app.get("/", (req, res) => {
     res.send("Hello, world!");

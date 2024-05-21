@@ -1,4 +1,5 @@
 import mongoose, { mongo } from "mongoose";
+import Product from "../models/Product.js";
 import ImageHandler from '../util/imageHandler.js'
 
 await mongoose.connect(process.env.MONGO_KEY, {
@@ -13,16 +14,6 @@ const isUndefined = (T) => {
     }
     return false;
 }
-
-const Product = mongoose.model('Product', {
-    name: String,
-    description : String,
-    type : String,
-    quantity : Number,
-    unit : String, 
-    price: Number,
-    image_url: String
-});
 
 const ShoppingCart = mongoose.model('ShoppingCart', {
     userId: mongoose.Types.ObjectId,
