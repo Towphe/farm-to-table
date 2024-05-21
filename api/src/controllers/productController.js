@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import Product from "../models/Product.js";
 import ImageHandler from '../util/imageHandler.js'
 
@@ -15,21 +15,11 @@ const isUndefined = (T) => {
     return false;
 }
 
-// const Product = mongoose.model('Product', {
-//     name: String,
-//     description : String,
-//     type : String,
-//     quantity : Number,
-//     unit : String, 
-//     price: Number,
-//     image_url: String
-// });
-
 const ShoppingCart = mongoose.model('ShoppingCart', {
-    userId: String,
+    userId: mongoose.Types.ObjectId,
     productName: String,
-    productId: String,
-    price: Number,
+    productId: mongoose.Types.ObjectId,
+    price: mongoose.Types.Decimal128,
     quantity: Number
 });
 
@@ -66,11 +56,33 @@ const saveToCart = async (req, res) => {
         userId: req.user.userId,
         productName: req.body.productName,
         productId: req.body.productId,
-        price: req.body.price,
+        price: new mongoose.Types.Decimal128(req.body.price.toString()),
         quantity: req.body.quantity
     });
 
-    return res.json({detail: `Added to cart.`});
+    const product = await Product.findOneAndUpdate(
+        { _id: req.body.productId },
+        { $inc: { quantity: -1 } }, 
+        { new: true } 
+    );
+
+    return res.json({ detail: `Added to cart.`, product });
 }
 
-export{retrieveProduct, retrieveProducts, saveToCart};
+const retrieveCart = async (req, res) => {
+    const cartItems = await ShoppingCart.find({
+        userId: req.user.userId
+    });
+
+    return res.send(cartItems);
+};
+
+const deleteItems = async (req, res) => {
+    const itemId = req.params.itemId;
+
+    const resu = await ShoppingCart.findByIdAndDelete(itemId);
+    
+    return res.sendStatus(200);
+};
+
+export{retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems};

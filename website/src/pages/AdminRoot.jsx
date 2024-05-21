@@ -9,7 +9,6 @@ function AdminRoot(){
     const navigate = useNavigate();
     useEffect(() => {
         if (role !== 'ADMIN'){
-            
             navigate("/", {replace: true});
             return;
         }

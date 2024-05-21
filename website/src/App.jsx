@@ -13,6 +13,9 @@ import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
 import Products from './pages/Products.jsx'
 import ProductDetail from './pages/ProductDetail.jsx'
+import ProductInfo from './pages/ProductInfo.jsx'
+import ShoppingCart from './pages/ShoppingCart.jsx'
+import ProductList from './pages/ProductList.jsx'
 import {ProtectedRoute} from './components/common/ProtectedRoute.jsx'
 import AuthProvider from "./components/common/AuthProvider.jsx";
 import axios from 'axios'
@@ -42,6 +45,10 @@ const router = createBrowserRouter([
             {
                 path: 'products/:code',
                 element: <ProductDetail/>
+            },
+            {
+                path: 'shopping-cart',
+                element: <ShoppingCart/>
             }
         ]
     },
@@ -55,7 +62,15 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: '',
-                        element: <h1>Admin placeholder 2</h1>
+                        element: <h1>Admin Placeholder 2</h1>
+                    },
+                    {
+                        path: 'products',
+                        element: <ProductList/>
+                    },
+                    {
+                        path: 'products/:code',
+                        element: <ProductInfo/>
                     }
                     ,
                     {
@@ -63,7 +78,8 @@ const router = createBrowserRouter([
                         element: <Reports />
                     }
                 ]
-            }
+            },
+
         ]    // place other admin reltated routes here
     }
 ]);
