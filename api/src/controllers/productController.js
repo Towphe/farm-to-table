@@ -51,17 +51,18 @@ const retrieveProducts = async (req, res) => {
 }
 
 const addProduct = async (req, res) => {
-    const { name, description, type, quantity, unit, price, image_url} =  req.body;
-    const newProduct = new Product({
-        name, description, type, quantity, unit, price, image_url
+
+    await Product.create({
+        name: req.body.name,
+        description: req.body.description,
+        type: req.body.type,
+        quantity: req.body.quantity,
+        unit: req.body.unit,
+        price: new mongoose.Types.Decimal128(req.body.price.toString()),
+        image_url: req.body.image_url
     })
 
-    try {
-        await newProduct.save();
-        res.json({inserted: true});
-    } catch (error){
-        res.json({inserted: false});
-    }
+    return res.json({detail: `Added to cart.`})
 }
 
 const saveToCart = async (req, res) => {

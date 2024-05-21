@@ -22,22 +22,26 @@ function AddProduct() {
         });
     };
     
-   const submitProduct = async () => {
-    if (price < 0 || quantity < 0) {
-        alert('Price and quantity must be non-negative.');
-        return;
-      }
-        await axios.post(`http://localhost:3000/api/product`, {
-            name: details.name,
-            description: details.description,
-            type: details.type,
-            price: details.price,
-            quantity: details.quantity,
-            unit: details.unit,
-            image_url: details.url
-        }, console.log("added to cart"));
-        setMessage('Product added successfully!');
-   }
+    const submitProduct = async (e) => {
+        e.preventDefault();
+
+        if (details.price < 0 || details.quantity < 0) {
+            alert('Price and quantity must be non-negative.');
+            return;
+        }
+
+        try {
+            await axios.post(`http://localhost:3000/api/product/`, {
+                details
+            }, {withCredentials: true}).then(res => {
+                // add pop notif that item has been added to cart later
+                console.log("Added to cart.")
+              });
+        } catch (error) {
+            console.error('Error adding product:', error);
+            setMessage('Error adding product. Please try again.');
+        }
+    }
 
    return(
         <main className="relative w-full h-full overflow-x-hidden gap-6 mt-10">
@@ -135,9 +139,11 @@ function AddProduct() {
                             required
                         />
                 </div>
-                <button onClick={submitProduct} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                < div className="flex justify-center">
+                <button type= "submit" className="flex bg-yellow-500 rounded-full hover:bg-green-700 text-off-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Add Product
                 </button>
+                </div>
                 </form>
             </div>
              {message && <p className="mt-4 text-center text-red-500">{message}</p>}
