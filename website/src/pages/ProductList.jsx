@@ -47,7 +47,7 @@ function ProductList(){
                           <td>{product.type}</td>
                           <td>{product.quantity}</td>
                           <td>{product.unit}</td>
-                          <td>{product.price}</td>
+                          <td>₱ {product.price["$numberDecimal"]}</td>
                           <td className="hover:cursor-pointer">
                             <button>
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
