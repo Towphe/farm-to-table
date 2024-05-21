@@ -69,7 +69,13 @@ const saveToCart = async (req, res) => {
         quantity: req.body.quantity
     });
 
-    return res.json({detail: `Added to cart.`});
+    const product = await Product.findOneAndUpdate(
+        { _id: req.body.productId },
+        { $inc: { quantity: -1 } }, 
+        { new: true } 
+    );
+
+    return res.json({ detail: `Added to cart.`, product });
 }
 
 const retrieveCart = async (req, res) => {
