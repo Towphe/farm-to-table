@@ -59,6 +59,21 @@ const retrieveProducts = async (req, res) => {
     });
 }
 
+const addProduct = async (req, res) => {
+
+    await Product.create({
+        name: req.body.name,
+        description: req.body.description,
+        type: req.body.type,
+        quantity: req.body.quantity,
+        unit: req.body.unit,
+        price: parseFloat(req.body.price),
+        image_url: req.body.image_url
+    })
+
+    return res.json({detail: `Added to Product List.`})
+}
+
 const saveToCart = async (req, res) => {
     const cart = await ShoppingCart.findOneAndUpdate(
         {
@@ -104,4 +119,30 @@ const deleteItems = async (req, res) => {
     return res.sendStatus(200);
 };
 
-export{retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems};
+const editItems = async (req, res) => {
+    const productId = req.params.productId;
+    try{
+        const result = await Product.findOneAndUpdate(
+            {
+                // query
+                _id : productId
+            },
+            {
+                // update
+                $set: {
+                    "description": req.body.description,
+                    "price": parseFloat(req.body.price),
+                    "quantity": req.body.quantity
+                }
+            },
+            {
+                upsert: false
+            }
+        );
+        res.json({ success: true});
+    } catch (error) {
+        res.status(500).json({success: false, error: error.message})
+    }
+}
+
+export{editItems, retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems, addProduct};

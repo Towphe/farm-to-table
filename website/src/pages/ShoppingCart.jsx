@@ -30,7 +30,6 @@ function ShoppingCart() {
 
     const handleDelete = (itemId) => {
         axios.delete(`http://localhost:3000/api/shopping-cart/${itemId}`)
-            .then(res => console.log("Item deleted."));
     };
 
     return (

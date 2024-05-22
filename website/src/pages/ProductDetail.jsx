@@ -28,9 +28,9 @@ function ProductDetail() {
     await axios.post(`http://localhost:3000/api/product/add-to-cart`, {
       productName: product.name,
       productId: product._id,
-      price: product.price,
+      price: product.price['$numberDecimal'],
       quantity: product.quantity
-    }).then(res => console.log("Added to cart."));
+    });
   }
 
 
@@ -43,7 +43,7 @@ function ProductDetail() {
           <img src={product.image_url} />
           <div className="flex justify-between w-full p-1 g-3 space-x-10 font-bold text-2xl">       
             <span>{product.name}</span>
-            <span>P{product.price}</span>
+            <span>P{product.price["$numberDecimal"]}</span>
           </div>
           <p>{product.description}</p>
           {product.quantity === 0 ? <p className='text-red-500'>Out of stock</p> : <></>}
