@@ -14,27 +14,117 @@ function CheckoutView()
   const {role} = useAuth();
   // const navigate = useNavigate();
 
-  useEffect(() => 
-  {
+//   useEffect(() => 
+//   {
+//     const [OrderDetails, setOrderDetails] = 
+//     useState(
+//       {
+//         payment: 0,
+//         house_num: '',
+//         street: '',
+//         brgy: '',
+//         city: '',
+//         province: ''
+//       });
 
-    // if (role === undefined) 
-    // {
-    //   navigate("/", {replace: true});
-    //   return;
-    // }
-    // set items ko muna para hindi na magsave ng code 
-    axios.get(`http://localhost:3000/api/shopping-cart`)
-        .then(response => 
-        {
-            setItems(response.data)
-            let t = 0;
-            items.map((item) => 
-            {
-              t += parseFloat(item.price["$numberDecimal"])
-            });
-            setTotal(t);
-        });
-  }, []);
+//   const [missingPayment, setPaymentAsMissing] = useState(false);
+//   const [missingHouseNo, setHouseNoAsMissing] = useState(false);
+//   const [missingStreet, setStreetAsMissing] = useState(false);
+//   const [missingBrgy, setBrgyAsMissing] = useState(false);
+//   const [missingCity, setCityAsMissing] = useState(false);
+//   const [missingProvince, setProvinceAsMissing] = useState(false);
+  
+//   const handleChange = (e) => 
+//   {
+//     const {name, value} = e.target;
+    
+//     setOrderDetails(prevState => 
+//       ({
+//         ...prevState,
+//         [name]: value,
+//       }));
+//   };
+
+//   const signup = async () => 
+//   {
+//     // set false by default
+//     setPaymentAsMissing(false);
+//     setHouseNoAsMissing(false);
+//     setStreetAsMissing(false);
+//     setBrgyAsMissing(false);
+//     setCityAsMissing(false);
+//     setProvinceAsMissing(false);
+
+//     if (OrderDetails.payment === "")
+//       setPaymentAsMissing(true);
+
+//     if (OrderDetails.house_num === "")
+//       setHouseNoAsMissing(true);
+
+//     if (OrderDetails.street === "")
+//       setStreetAsMissing(true);
+
+//     if (OrderDetails.brgy === "")
+//       setBrgyAsMissing(true);
+
+//     if (OrderDetails.city === "")
+//       setCityAsMissing(true);
+
+//     if (OrderDetails.province === "")
+//       setProvinceAsMissing(true);
+
+//     if (missingPayment || missingHouseNo || missingStreet || missingBrgy || missingCity || missingProvince)
+//     {
+//         // short circuit sign up
+//         return;
+//     }
+    
+//     // await axios.post('http://localhost:3000/api/auth/sign-up', {
+//     //     firstName: signupData.firstName,
+//     //     middleName: signupData.middleName === '' ? null : signupData.middleName,
+//     //     lastName: signupData.lastName,
+//     //     email: signupData.email,
+//     //     password: signupData.password
+//     // }).then((response) => {
+//     //     // save role
+//     //     setRole(response.data.role);
+//     //       // create expiry date then store expiry datetime
+//     //     const expiresIn = DateTime.now().plus({seconds: response.data.expiresIn});
+//     //     // redirect to home page
+//     //     navigate("/", {replace: true});
+//     // }).catch((err) => {
+//     //     console.log(err);
+//     //     switch (err.response.status){
+//     //         case 400:
+//     //             // notify user of invalid credentials
+//     //             console.log(err.response.detail)
+//     //             break;
+//     //         default:
+//     //             // server error (prolly)
+//     //             // notify user
+//     //             alert("Server error. Try contacting the website administrator.");   // change this later on?
+//     //             break;
+//     //     }
+//     // });
+// }
+//     // if (role === undefined) 
+//     // {
+//     //   navigate("/", {replace: true});
+//     //   return;
+//     // }
+//     // set items ko muna para hindi na magsave ng code 
+//     axios.get(`http://localhost:3000/api/shopping-cart`)
+//         .then(response => 
+//         {
+//             setItems(response.data)
+//             let t = 0;
+//             items.map((item) => 
+//             {
+//               t += parseFloat(item.price["$numberDecimal"])
+//             });
+//             setTotal(t);
+//         });
+//   }, []);
 
   return (
     <main className="flex flex-col min-h-screen bg-gray-100 p-4">
