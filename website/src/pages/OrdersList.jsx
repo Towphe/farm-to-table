@@ -17,7 +17,7 @@ function OrdersList()
         {transactionId: 134290, item: 'Manila Paper', qty: 50}, 
         {transactionId: 134290, item: 'Cartolina', qty: 5}
     ]
-
+    // status, total price, createdAt. list of all existing transactions ni user
     // const [orders, setOrders] = useState([]);
     // const [pageCount, setPageCount] = useState();
 
