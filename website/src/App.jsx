@@ -12,15 +12,18 @@ import SignUp from './pages/Signup.jsx'
 import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
 import Products from './pages/Products.jsx'
-import OrdersList from './pages/OrdersList.jsx'
-import CheckoutView from './pages/CheckoutView.jsx'
-import OrderSuccess from './pages/SuccessView.jsx'
 import ProductDetail from './pages/ProductDetail.jsx'
+import ProductInfo from './pages/ProductInfo.jsx'
+import ShoppingCart from './pages/ShoppingCart.jsx'
+import ProductList from './pages/ProductList.jsx'
+import OrdersList from './pages/OrdersList.jsx'
 import OrderDetail from './pages/OrderDetail.jsx'
+import CheckoutView from './pages/CheckoutView.jsx'
+import SuccessView from './pages/SuccessView.jsx'
 import {ProtectedRoute} from './components/common/ProtectedRoute.jsx'
 import AuthProvider from "./components/common/AuthProvider.jsx";
 import axios from 'axios'
-
+import Reports from './pages/Reports.jsx'
 
 const router = createBrowserRouter([
     {
@@ -48,6 +51,10 @@ const router = createBrowserRouter([
                 element: <ProductDetail/>
             },
             {
+                path: 'shopping-cart',
+                element: <ShoppingCart/>
+            },
+            {
                 path: 'orders',
                 element: <OrdersList/>
             },
@@ -61,7 +68,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'success',
-                element: <OrderSuccess/>
+                element: <SuccessView/>
             }
         ]
     },
@@ -75,10 +82,24 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: '',
-                        element: <h1>Admin placeholder 2</h1>
+                        element: <h1>Admin Placeholder 2</h1>
+                    },
+                    {
+                        path: 'products',
+                        element: <ProductList/>
+                    },
+                    {
+                        path: 'products/:code',
+                        element: <ProductInfo/>
+                    }
+                    ,
+                    {
+                        path: 'reports',
+                        element: <Reports />
                     }
                 ]
-            }
+            },
+
         ]    // place other admin reltated routes here
     }
 ]);

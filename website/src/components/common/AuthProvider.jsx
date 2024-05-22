@@ -7,7 +7,6 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   // State to hold the authentication token
   const [role, setRole_] = useState(Cookie.get('role'));
-
   // Function to set the authentication token
 
   const setRole = (newRole) => {

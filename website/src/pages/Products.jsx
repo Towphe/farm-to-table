@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import {Link} from 'react-router-dom';
 
-//const products = [{code: 'Luya', Image: 'https://assets.epicurious.com/photos/58d3fed8e2c8295cfbf4a52f/master/pass/ginger_root_pile_23032017.jpg', desc:'420.69'}, {code: 'Patatas', Image: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQL10SiAaQxje_j6zT5Wlg92SOv9XfExLMkhEHxrJM-lN_7LBL9', desc:'420.69'}, {code:'Repolyo', Image: 'https://static.toiimg.com/thumb/resizemode-4,width-1280,height-720,msid-97704047/97704047.jpg', desc:'420.69'}]
-
 function Products(){
 
     const [products, setProducts] = useState([]);
@@ -19,12 +17,16 @@ function Products(){
           .catch(error => console.error('Error fetching products:', error));
       }, []);
 
+      const goToCart = () => {
+        history.push('/Shopping-Cart');
+      };
+
       const addToCart = async (e) => {
         
         const productId = e.target.getAttribute('data-product-id').split("-")[1];
         const product = products.filter((p) => p._id == productId)[0];
         
-        await axios.post(`http://localhost:3000/api/product/add-to-cart`, {
+        await axios.post(`http://localhost:3000/api/shopping-cart`, {
           productName: product.name,
           productId: product._id,
           price: product.price,
@@ -47,14 +49,17 @@ function Products(){
                   <span>
                   <Link to={`/products/${product._id}`}>{product.name}</Link>
                   </span>
-                  <span>P{product.price}</span>
+                  <td>₱ {product.price["$numberDecimal"]}</td>
                 </div>
                 <button data-product-id={"button-" + product._id} onClick={addToCart} className='shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2 hover:opacity-75'>Add to Cart</button>
-              </div>
+              </div> 
             ))}
+            <div className='md:ml-10 flex place-self-start'>
+            <Link to="/Shopping-Cart"className='m-5 shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2 absolute top-20'>Shopping Cart</Link>
+            </div>        
           </div>
           <ul className="absolute w-screen text-center bottom-4 text-xl">
-            {Array.from({length: pageCount}, (v, k) => k+1).map((n) => <li key={n}><Link to="/product">{n}</Link></li>)}
+            {Array.from({length: pageCount}, (v, k) => k+1).map((n) => <li key={n}><Link to={`/products?p=${n}&c=${10}`}>{n}</Link></li>)}
           </ul>
         </main>
       );

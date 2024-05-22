@@ -1,5 +1,7 @@
-import mongoose from "mongoose";
-import ImageHandler from '../util/imageHandler.js'
+import mongoose, { mongo } from "mongoose";
+import Product from "../models/Product.js";
+import ImageHandler from '../util/imageHandler.js';
+import {Decimal128} from 'decimal128';
 
 await mongoose.connect(process.env.MONGO_KEY, {
     useNewUrlParser: true, useUnifiedTopology: true
@@ -14,22 +16,20 @@ const isUndefined = (T) => {
     return false;
 }
 
-const Product = mongoose.model('Product', {
-    name: String,
-    description : String,
-    type : String,
-    quantity : Number,
-    unit : String, 
-    price: Number,
-    image_url: String
-});
-
 const ShoppingCart = mongoose.model('ShoppingCart', {
-    userId: String,
+    userId: mongoose.Types.ObjectId,
     productName: String,
-    productId: String,
-    price: Number,
-    quantity: Number
+    productId: mongoose.Types.ObjectId,
+    price: {
+        default: 0,
+        required: true,
+        type: mongoose.Types.Decimal128,
+    },
+    quantity: {
+        default: 0,
+        required: true,
+        type: Number,
+    }
 });
 
 const retrieveProduct = async (req, res) => {
@@ -60,17 +60,48 @@ const retrieveProducts = async (req, res) => {
 }
 
 const saveToCart = async (req, res) => {
+    const cart = await ShoppingCart.findOneAndUpdate(
+        {
+            // query/match
+            userId: req.user.userId,
+            productName: req.body.productName
+        },
+        {   
+            // to update / to insert
+            $set : {
+                userId: req.user.userId,
+                productName: req.body.productName,
+                productId: req.body.productId
+            },
+            $inc :{
+                quantity: 1,
+                price: parseFloat(req.body.price["$numberDecimal"])
+            }
+        },
+        {
+            // options
+            upsert: true,
+            new: true
+        }
+    )
 
-    await ShoppingCart.create(
-    {
-        userId: req.user.userId,
-        productName: req.body.productName,
-        productId: req.body.productId,
-        price: req.body.price,
-        quantity: req.body.quantity
-    });
-
-    return res.json({detail: `Added to cart.`});
+    return res.json({ detail: `Added to cart.` });
 }
 
-export{retrieveProduct, retrieveProducts, saveToCart};
+const retrieveCart = async (req, res) => {
+    const cartItems = await ShoppingCart.find({
+        userId: req.user.userId
+    });
+
+    return res.send(cartItems);
+};
+
+const deleteItems = async (req, res) => {
+    const itemId = req.params.itemId;
+
+    const resu = await ShoppingCart.findByIdAndDelete(itemId);
+    
+    return res.sendStatus(200);
+};
+
+export{retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems};
