@@ -1,5 +1,6 @@
 import {v2 as cloudinary} from 'cloudinary';
 import crypto from 'crypto';
+import { url } from 'inspector';
 
 class ImageHandler{
     constructor(){
@@ -36,11 +37,22 @@ class ImageHandler{
         // }
 
         // upload each file manually
-        filePaths.map(async (filePath) => {
-            await cloudinary.uploader.upload(filePath, {
-                public_id: `farm-to-table/${to}/${id}/${crypto.randomBytes(16).toString('hex')}`
-            }).catch(err => console.log(err));
-        });
+        // const imageUrls = filePaths.map(async (filePath) => {
+        //     let url;
+        //     const res = await cloudinary.uploader.upload(filePath, {
+        //         public_id: `farm-to-table/${to}/${id}/${crypto.randomBytes(16).toString('hex')}`
+        //     })
+        //     .catch(err => console.log(err));
+
+        //     return res.url;
+        // });
+        // temporarily set to upload only one
+        const res = await cloudinary.uploader.upload(filePaths[0], {
+                    public_id: `farm-to-table/${to}/${id}/${crypto.randomBytes(16).toString('hex')}`
+                })
+                .catch(err => console.log(err));
+        
+        let imageUrls = [res.url];
 
         // console.log(`marked as success ${Date.now()}`);
         
@@ -56,8 +68,9 @@ class ImageHandler{
         return {
             isComplete: true,
             uploaded: filePaths.length, //successfulUploadCtr,  // reconfigure this checker later
-            total: filePaths.length
-        }
+            total: filePaths.length,
+            imageUrls: imageUrls
+        };
     }
 
     async retrieveFilesInFolder(from, id){

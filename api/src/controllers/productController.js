@@ -60,7 +60,7 @@ const retrieveProducts = async (req, res) => {
 }
 
 const addProduct = async (req, res) => {
-
+    let productId;
     await Product.create({
         name: req.body.name,
         description: req.body.description,
@@ -69,9 +69,30 @@ const addProduct = async (req, res) => {
         unit: req.body.unit,
         price: parseFloat(req.body.price),
         image_url: req.body.image_url
-    })
+    }).then(res => productId = res._id);
 
-    return res.json({detail: `Added to Product List.`})
+    return res.json({detail: `Added to Product List.`, productId: productId});
+}
+
+const addProductImage = async (req, res) => {
+    // find product by id
+    const productId = req.params.productId;
+    let product = Product.findById(productId)
+                    .then(async (product) => {
+                        const image = req.files.image;
+                        const resu = await imageHandler.uploadFiles([image.tempFilePath], 'products', productId);
+                        console.log(resu);
+                        product.image_url = resu.imageUrls[0];
+                        product.save();
+                        // console.log(product);
+                    });
+    console.log(product);
+    // if (!product){
+    //     res.statusCode = 404;
+    //     return res.json({detail: 'Product non-existent'});
+    // }
+
+    return res.json({detail: 'Added product image'});
 }
 
 const saveToCart = async (req, res) => {
@@ -145,4 +166,4 @@ const editItems = async (req, res) => {
     }
 }
 
-export{editItems, retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems, addProduct};
+export{editItems, retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems, addProduct, addProductImage};
