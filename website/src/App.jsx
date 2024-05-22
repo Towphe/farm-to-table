@@ -12,6 +12,7 @@ import SignUp from './pages/Signup.jsx'
 import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
 import AddProduct from './pages/AddProduct.jsx'
+import EditProducts from './pages/EditProduct.jsx'
 import Products from './pages/Products.jsx'
 import ProductDetail from './pages/ProductDetail.jsx'
 import ProductInfo from './pages/ProductInfo.jsx'
@@ -21,6 +22,7 @@ import {ProtectedRoute} from './components/common/ProtectedRoute.jsx'
 import AuthProvider from "./components/common/AuthProvider.jsx";
 import axios from 'axios'
 import Reports from './pages/Reports.jsx'
+
 
 const router = createBrowserRouter([
     {
@@ -82,6 +84,11 @@ const router = createBrowserRouter([
                     {
                         path: 'add-product',
                         element: <AddProduct/>
+                    }
+                    ,
+                    {
+                        path: 'edit-product/:id',
+                        element: <EditProducts/>
                     }
                 ]
             },

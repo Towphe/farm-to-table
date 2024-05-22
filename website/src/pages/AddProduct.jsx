@@ -5,8 +5,8 @@ function AddProduct() {
     const [details, setDetails] = useState({
         "description": "",
         "name": "",
-        "price": "",
-        "quantity": "",
+        "price": 0,
+        "quantity": 0,
         "type": "",
         "unit": "",
         "image_url": ""

@@ -100,4 +100,14 @@ const deleteItems = async (req, res) => {
     return res.sendStatus(200);
 };
 
-export{retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems, addProduct};
+const editItems = async (req, res) => {
+    const { query, update} = req.body;
+    try{
+        const result = await Product.updateOne(query, update);
+        res.json({ success: true, result});
+    } catch (error) {
+        res.status(500).json({success: false, error: error.message})
+    }
+}
+
+export{editItems, retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems, addProduct};

@@ -1,4 +1,4 @@
-import { addProduct, deleteItems, retrieveCart, retrieveProduct, retrieveProducts, saveToCart } from "../controllers/productController.js";
+import {editItems, addProduct, deleteItems, retrieveCart, retrieveProduct, retrieveProducts, saveToCart } from "../controllers/productController.js";
 import { authenticateJWT } from "../middleware/authMiddleware.js";
 
 const baseUrl = "/api/product";
@@ -13,6 +13,7 @@ const productRouter = (app) =>{
     app.delete(`${cartUrl}/:itemId`, authenticateJWT, deleteItems);
     app.post(`${cartUrl}`, authenticateJWT, saveToCart);
     app.post(`${adminUrl}/add-product`, authenticateJWT, addProduct);
+    app.post(`${adminUrl}/edit-product`, editItems)
 };
 
 export default productRouter
