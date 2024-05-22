@@ -11,11 +11,11 @@ function CheckoutView()
   // after nun post request
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
-  const {role} = useAuth();
+  // const {role} = useAuth();
   // const navigate = useNavigate();
 
-//   useEffect(() => 
-//   {
+  useEffect(() => 
+  {
 //     const [OrderDetails, setOrderDetails] = 
 //     useState(
 //       {
@@ -113,18 +113,18 @@ function CheckoutView()
 //     //   return;
 //     // }
 //     // set items ko muna para hindi na magsave ng code 
-//     axios.get(`http://localhost:3000/api/shopping-cart`)
-//         .then(response => 
-//         {
-//             setItems(response.data)
-//             let t = 0;
-//             items.map((item) => 
-//             {
-//               t += parseFloat(item.price["$numberDecimal"])
-//             });
-//             setTotal(t);
-//         });
-//   }, []);
+    axios.get(`http://localhost:3000/api/shopping-cart`)
+        .then(response => 
+        {
+            setItems(response.data)
+            let t = 0;
+            items.map((item) => 
+            {
+              t += parseFloat(item.price["$numberDecimal"])
+            });
+            setTotal(t);
+        });
+  }, []);
 
   return (
     <main className="flex flex-col min-h-screen bg-gray-100 p-4">
