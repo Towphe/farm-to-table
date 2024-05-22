@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 
 function AddProduct() {
+    const navigate = useNavigate();
     const [details, setDetails] = useState({
         "description": "",
         "name": "",
         "price": 0,
         "quantity": 0,
         "type": "",
-        "unit": "",
-        "image_url": ""
+        "unit": ""
     });
 
     const [message, setMessage] = useState('');
@@ -37,9 +38,22 @@ function AddProduct() {
                 "price": parseFloat(details.price),
                 "quantity": details.quantity,
                 "type": details.type,
-                "unit": details.unit,
-                "image": ""
-            }, {withCredentials: true});
+                "unit": details.unit
+            }, {withCredentials: true})
+                .then(async (res) => {
+                    console.log(res);
+                    // handle image upload
+                    const productId = res.data.productId;
+                    const image = document.getElementById("image-file");
+                    let data = new FormData();
+                    data.append(`image`, image.files[0])
+                    await axios.patch(`http://localhost:3000/api/admin/product/${productId}/image`, data, {
+                        headers: {
+                            'Content-Type' : 'multipart/form-data'
+                        }
+                    })
+                    .then(res => navigate("/admin/products"));
+                });
         } catch (error) {
             console.error('Error adding product:', error);
             setMessage('Error adding product. Please try again.');
@@ -123,7 +137,7 @@ function AddProduct() {
                         <input
                             type="text"
                             name="unit"
-                            value={details.unit}
+                            value={details.unit != "" ? details.unit : "kg"}
                             onChange={handleChange}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             required
@@ -131,12 +145,12 @@ function AddProduct() {
                 </div>
                 <div className="mb-1 p-6">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                            Image URL of Product
+                            Product Image
                         </label>
                         <input
-                            type="text"
-                            name="image_url"
-                            value={details.url}
+                            type="file"
+                            name="image"
+                            id="image-file"
                             onChange={handleChange}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             required
