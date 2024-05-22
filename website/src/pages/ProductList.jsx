@@ -11,7 +11,6 @@ function ProductList(){
     useEffect(() => {
         axios.get(`http://localhost:3000/api/product?p=${searchParams.get('p') ?? 1}&c=${searchParams.get('c') ?? 10}`)
           .then(response => {
-            console.log(response);
             setProducts(response.data.products);
             setPageCount(response.data.pages)
           })
@@ -19,7 +18,6 @@ function ProductList(){
       }, []);
 
       return (
-        // <main className="relative flex flex-col w-full h-full justify-center items-center">
         <main className="relative w-full h-full overflow-x-hidden gap-6 mt-10">
             <h1 className="w-screen h-auto text-center absolute top-4 block m-4 font-bold text-2xl">Product List</h1>
             <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-3 md:flex-col justify-center mt-24">

@@ -30,7 +30,7 @@ function ProductDetail() {
       productId: product._id,
       price: product.price['$numberDecimal'],
       quantity: product.quantity
-    }).then(res => console.log("Added to cart."));
+    });
   }
 
 

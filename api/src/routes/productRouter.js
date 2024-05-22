@@ -12,8 +12,8 @@ const productRouter = (app) =>{
     app.get(`${cartUrl}`, authenticateJWT, retrieveCart);
     app.delete(`${cartUrl}/:itemId`, authenticateJWT, deleteItems);
     app.post(`${cartUrl}`, authenticateJWT, saveToCart);
-    app.post(`${adminUrl}/add-product`, authenticateJWT, addProduct);
-    app.post(`${adminUrl}/edit-product`, editItems)
+    app.post(`${adminUrl}/product`, authenticateJWT, addProduct);
+    app.patch(`${adminUrl}/product/:productId`,authenticateJWT, editItems)
 };
 
 export default productRouter

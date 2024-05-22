@@ -58,11 +58,11 @@ const addProduct = async (req, res) => {
         type: req.body.type,
         quantity: req.body.quantity,
         unit: req.body.unit,
-        price: new mongoose.Types.Decimal128(req.body.price.toString()),
+        price: parseFloat(req.body.price),
         image_url: req.body.image_url
     })
 
-    return res.json({detail: `Added to cart.`})
+    return res.json({detail: `Added to Product List.`})
 }
 
 const saveToCart = async (req, res) => {
@@ -101,10 +101,26 @@ const deleteItems = async (req, res) => {
 };
 
 const editItems = async (req, res) => {
-    const { query, update} = req.body;
+    const productId = req.params.productId;
     try{
-        const result = await Product.updateOne(query, update);
-        res.json({ success: true, result});
+        const result = await Product.findOneAndUpdate(
+            {
+                // query
+                _id : productId
+            },
+            {
+                // update
+                $set: {
+                    "description": req.body.description,
+                    "price": parseFloat(req.body.price),
+                    "quantity": req.body.quantity
+                }
+            },
+            {
+                upsert: false
+            }
+        );
+        res.json({ success: true});
     } catch (error) {
         res.status(500).json({success: false, error: error.message})
     }

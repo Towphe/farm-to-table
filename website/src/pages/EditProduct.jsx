@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 
 
 function EditProducts() {
-  const {id} = useParams();
-  const [details, setDetails] = useState({
-      "description": "",
-      "name": "",
+    const navigate = useNavigate()
+    const {id} = useParams();
+    const [details, setDetails] = useState({
+        "description": "",
+        "name": "",
       "price": 0,
       "quantity": 0,
       "type": "",
@@ -19,7 +20,7 @@ function EditProducts() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-      axios.get(`http://localhost:3000/api/admin/edit-product/${id}`)
+      axios.get(`http://localhost:3000/api/product/${id}`)
       .then(body => {
           setDetails(body.data);
         } )
@@ -36,14 +37,18 @@ function EditProducts() {
 
   const modifyProduct = async (e) => {
       e.preventDefault();
-      if (details.price < 0 || quantity.price < 0) {
+      if (details.price < 0 || details.quantity < 0) {
           alert('Price and quantity must not have a negative value.')
           return;
       }
       try {
-          await axios.put(`http://localhost:3000/api/product/${id}`, details);
+          await axios.patch(`http://localhost:3000/api/admin/product/${id}`, {
+                "description" : details.description,
+                "price": parseFloat(details.price),
+                "quantity": details.quantity
+          });
           setMessage('Product updated successfully!');
-          history.push('/product-list'); // Redirect to the product list page after update
+          navigate("/admin/products");
       } catch (error) {
           console.error('Error updating product:', error);
           setMessage('Error updating product. Please try again.');
@@ -56,19 +61,7 @@ function EditProducts() {
           <h1 className="w-screen h-auto text-center block p-4 font-bold text-2xl">Edit Product</h1>
           <div className="w-screen h-auto flex flex-col items-center gap-4 md:flex-col justify-center mt-6">
               <form onSubmit={modifyProduct} className="w-full max-w-lg p-4 shadow-md rounded-md bg-white">
-                  <div className="mb-1 p-6">
-                      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                          Name
-                      </label>
-                      <input
-                          type="text"
-                          name="name"
-                          value={details.name}
-                          onChange={handleChange}
-                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          required
-                      />
-                  </div>
+
                   <div className="mb-1 px-6">
                       <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
                           Description
@@ -77,19 +70,6 @@ function EditProducts() {
                           type="text"
                           name="description"
                           value={details.description}
-                          onChange={handleChange}
-                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          required
-                      />
-                  </div>
-                  <div className="mb-1 p-6">
-                      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="type">
-                          Type
-                      </label>
-                      <input
-                          type="text"
-                          name="type"
-                          value={details.type}
                           onChange={handleChange}
                           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           required
@@ -116,32 +96,6 @@ function EditProducts() {
                           type="number"
                           name="quantity"
                           value={details.quantity}
-                          onChange={handleChange}
-                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          required
-                      />
-                  </div>
-                  <div className="mb-1 px-6">
-                      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="unit">
-                          Unit of Measurement
-                      </label>
-                      <input
-                          type="text"
-                          name="unit"
-                          value={details.unit}
-                          onChange={handleChange}
-                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          required
-                      />
-                  </div>
-                  <div className="mb-1 p-6">
-                      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image_url">
-                          Image URL of Product
-                      </label>
-                      <input
-                          type="text"
-                          name="image_url"
-                          value={details.image_url}
                           onChange={handleChange}
                           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           required

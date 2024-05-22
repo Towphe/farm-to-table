@@ -31,14 +31,10 @@ function Products(){
           productId: product._id,
           price: product.price,
           quantity: product.quantity
-        }, {withCredentials: true}).then(res => {
-          // add pop notif that item has been added to cart later
-          console.log("Added to cart.")
-        });
+        }, {withCredentials: true});
       };
 
       return (
-        // <main className="relative flex flex-col w-full h-full justify-center items-center">
         <main className="relative w-full h-full overflow-x-hidden">
           <h1 className="w-screen h-auto text-center absolute top-4 block m-4 font-bold text-3xl">Available Products</h1>
           <div className="absolute top-24 w-screen h-auto flex flex-col items-center gap-6 md:flex-row justify-center">

@@ -31,12 +31,15 @@ function AddProduct() {
         }
 
         try {
-            await axios.post(`http://localhost:3000/api/product/`, {
-                details
-            }, {withCredentials: true}).then(res => {
-                // add pop notif that item has been added to cart later
-                console.log("Added to cart.")
-              });
+            await axios.post(`http://localhost:3000/api/admin/product/`, {
+                "name": details.name,
+                "description": details.description,
+                "price": parseFloat(details.price),
+                "quantity": details.quantity,
+                "type": details.type,
+                "unit": details.unit,
+                "image": ""
+            }, {withCredentials: true});
         } catch (error) {
             console.error('Error adding product:', error);
             setMessage('Error adding product. Please try again.');
