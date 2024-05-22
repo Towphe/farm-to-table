@@ -74,11 +74,6 @@ const retrieveBasicReport = async (req, res) => {
     ]);
     
     orders.map((order) => {
-        // tally products
-        // producTally element: {id: "", name: "", count: `n`}
-        // productTally.map((product) => {
-        //     if (product.name === order.)
-        // })
         order.items.map((product) => {
             if (productTally[product.detail[0]._id] === undefined){
                 // product not yet in tally
@@ -98,7 +93,7 @@ const retrieveBasicReport = async (req, res) => {
         }
         else if (order.status === 1){     // completed
             completedOrders += 1;
-            totalIncome += order.totalIncome;
+            totalIncome += order.totalPrice;
         }
         else if (order.status === 2){   // cancelled
             cancelledOrders += 1;

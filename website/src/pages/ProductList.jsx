@@ -45,7 +45,7 @@ function ProductList(){
                           <td>{product.type}</td>
                           <td>{product.quantity}</td>
                           <td>{product.unit}</td>
-                          <td>{product.price["$numberDecimal"]}</td>
+                          <td>₱ {product.price["$numberDecimal"]}</td>
                           <td className="hover:cursor-pointer">
                             <button>
                               <Link to={`/admin/edit-product/${product._id}`}>
