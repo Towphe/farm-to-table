@@ -13,106 +13,29 @@ function CheckoutView()
   const [total, setTotal] = useState(0);
   // const {role} = useAuth();
   // const navigate = useNavigate();
+  const [OrderDetails, setOrderDetails] = 
+    useState(
+      {
+        house_num: '',
+        street: '',
+        brgy: '',
+        city: '',
+        province: ''
+      });
 
-  useEffect(() => 
+  const handleChange = (e) => 
   {
-//     const [OrderDetails, setOrderDetails] = 
-//     useState(
-//       {
-//         payment: 0,
-//         house_num: '',
-//         street: '',
-//         brgy: '',
-//         city: '',
-//         province: ''
-//       });
-
-//   const [missingPayment, setPaymentAsMissing] = useState(false);
-//   const [missingHouseNo, setHouseNoAsMissing] = useState(false);
-//   const [missingStreet, setStreetAsMissing] = useState(false);
-//   const [missingBrgy, setBrgyAsMissing] = useState(false);
-//   const [missingCity, setCityAsMissing] = useState(false);
-//   const [missingProvince, setProvinceAsMissing] = useState(false);
-  
-//   const handleChange = (e) => 
-//   {
-//     const {name, value} = e.target;
+    const {name, value} = e.target;
     
-//     setOrderDetails(prevState => 
-//       ({
-//         ...prevState,
-//         [name]: value,
-//       }));
-//   };
-
-//   const signup = async () => 
-//   {
-//     // set false by default
-//     setPaymentAsMissing(false);
-//     setHouseNoAsMissing(false);
-//     setStreetAsMissing(false);
-//     setBrgyAsMissing(false);
-//     setCityAsMissing(false);
-//     setProvinceAsMissing(false);
-
-//     if (OrderDetails.payment === "")
-//       setPaymentAsMissing(true);
-
-//     if (OrderDetails.house_num === "")
-//       setHouseNoAsMissing(true);
-
-//     if (OrderDetails.street === "")
-//       setStreetAsMissing(true);
-
-//     if (OrderDetails.brgy === "")
-//       setBrgyAsMissing(true);
-
-//     if (OrderDetails.city === "")
-//       setCityAsMissing(true);
-
-//     if (OrderDetails.province === "")
-//       setProvinceAsMissing(true);
-
-//     if (missingPayment || missingHouseNo || missingStreet || missingBrgy || missingCity || missingProvince)
-//     {
-//         // short circuit sign up
-//         return;
-//     }
-    
-//     // await axios.post('http://localhost:3000/api/auth/sign-up', {
-//     //     firstName: signupData.firstName,
-//     //     middleName: signupData.middleName === '' ? null : signupData.middleName,
-//     //     lastName: signupData.lastName,
-//     //     email: signupData.email,
-//     //     password: signupData.password
-//     // }).then((response) => {
-//     //     // save role
-//     //     setRole(response.data.role);
-//     //       // create expiry date then store expiry datetime
-//     //     const expiresIn = DateTime.now().plus({seconds: response.data.expiresIn});
-//     //     // redirect to home page
-//     //     navigate("/", {replace: true});
-//     // }).catch((err) => {
-//     //     console.log(err);
-//     //     switch (err.response.status){
-//     //         case 400:
-//     //             // notify user of invalid credentials
-//     //             console.log(err.response.detail)
-//     //             break;
-//     //         default:
-//     //             // server error (prolly)
-//     //             // notify user
-//     //             alert("Server error. Try contacting the website administrator.");   // change this later on?
-//     //             break;
-//     //     }
-//     // });
-// }
-//     // if (role === undefined) 
-//     // {
-//     //   navigate("/", {replace: true});
-//     //   return;
-//     // }
-//     // set items ko muna para hindi na magsave ng code 
+    setOrderDetails(prevState => 
+    ({
+        ...prevState,
+        [name]: value,
+    }));
+  };
+// sa submit, console log
+  useEffect(() => 
+  { 
     axios.get(`http://localhost:3000/api/shopping-cart`)
         .then(response => 
         {
@@ -159,31 +82,32 @@ function CheckoutView()
         <label className="block text-gray-700 text-md mb-2" for="house-number">
           House number / Unit no.
         </label>
-        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="house-number" type="text" placeholder="e.g., Rm. 3102"/>
+        <input name="house_num" onChange= {handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="house-number" type="text" placeholder="e.g., Rm. 3102"/>
       </div>
       <div className="mb-4">
         <label className="block text-gray-700 text-md mb-2" for="street">
           Street
         </label>
-        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="street" type="text" placeholder="e.g., Emerald Street"/>
+        <input name="street" onChange= {handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="street" type="text" placeholder="e.g., Emerald Street"/>
       </div>
       <div className="mb-4">
         <label className="block text-gray-700 text-md mb-2" for="brgy">
           Baranggay
         </label>
-        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="brgy" type="text" placeholder="e.g., Brgy. Batong Malake"/>
+        <input name="brgy" onChange= {handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="brgy" type="text" placeholder="e.g., Brgy. Batong Malake"/>
       </div>
       <div className="mb-4">
         <label className="block text-gray-700 text-md mb-2" for="city">
           City
         </label>
-        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="city" type="text" placeholder="e.g., Quezon City"/>
+        {/* place handlechange sa input box */}
+        <input name="city" onChange= {handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="city" type="text" placeholder="e.g., Quezon City"/>
       </div>
       <div className="mb-4">
         <label className="block text-gray-700 text-md mb-2" for="province">
           Province
         </label>
-        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="province" type="text" placeholder="e.g., Quezon"/>
+        <input name="province" onChange= {handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="province" type="text" placeholder="e.g., Quezon"/>
       </div>
       </section>
       <Link to="/success" className="bg-green-700 hover:bg-green-400 text-white font-bold py-2 px-4 rounded-full inline-flex justify-center items-center w-full">

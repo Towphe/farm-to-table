@@ -8,7 +8,7 @@ function ShoppingCart() {
     const [items, setItems] = useState([]);
     const [total, setTotal] = useState(0);
     // const {role} = useAuth();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     useEffect(() => {
 
