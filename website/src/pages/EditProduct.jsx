@@ -22,7 +22,10 @@ function EditProducts() {
   useEffect(() => {
       axios.get(`http://localhost:3000/api/product/${id}`)
       .then(body => {
+          console.log(body);
           setDetails(body.data);
+
+          //console.log();
         } )
         .catch(error => console.error('Error fetching product details:', error));
     }, []);
@@ -82,7 +85,7 @@ function EditProducts() {
                       <input
                           type="number"
                           name="price"
-                          value={details.price}
+                          value={details.price["$numberDecimal"]}
                           onChange={handleChange}
                           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           required
