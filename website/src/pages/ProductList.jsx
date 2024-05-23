@@ -1,21 +1,28 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {Link, useSearchParams} from 'react-router-dom';
+import LoadingScreen from "../components/common/LoadingScreen";
 
 function ProductList(){
 
     const [products, setProducts] = useState([]);
     const [pageCount, setPageCount] = useState();
     const [searchParams, setSearchParams] = useSearchParams();
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         axios.get(`http://localhost:3000/api/product?p=${searchParams.get('p') ?? 1}&c=${searchParams.get('c') ?? 10}`)
           .then(response => {
             setProducts(response.data.products);
-            setPageCount(response.data.pages)
+            setPageCount(response.data.pages);
+            setIsLoading(false);
           })
           .catch(error => console.error('Error fetching products:', error));
       }, []);
+
+      if (isLoading){
+        return <LoadingScreen /> ;
+      }
 
       return (
         <main className="relative w-full h-full overflow-x-hidden gap-6 mt-10">
