@@ -44,20 +44,22 @@ const retrieveProduct = async (req, res) => {
 };
 
 const retrieveProducts = async (req, res) => {
-    const p = isUndefined(req.query.p) ? 1 : req.query.p;
-    const c = isUndefined(req.query.c) ? 10 : req.query.c;
+    const p = isUndefined(req.query.p) ? 1 : parseInt(req.query.p);
+    const c = isUndefined(req.query.c) ? 10 : parseInt(req.query.c);
+    const sort = req.query.sort || 'name';
+    const filter = req.query.filter ? { type: new RegExp(req.query.filter, 'i') } : {};
 
-    // also get: total pages depending on `c`
-    const productCount = Product.length;
-    const pageCount = Math.floor(productCount / c) + 1;
+    try {
+        const productCount = await Product.countDocuments(filter);
+        const pageCount = Math.ceil(productCount / c);
 
-    const products = await Product.find().skip((p - 1) * c).limit(c);
-    
-    res.send({
-        products: products,
-        pages: pageCount
-    });
-}
+        const products = await Product.find(filter).sort(sort).skip((p - 1) * c).limit(c);
+
+        res.json({ products, pages: pageCount });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
 
 const addProduct = async (req, res) => {
     let productId;
@@ -165,5 +167,6 @@ const editItems = async (req, res) => {
         res.status(500).json({success: false, error: error.message})
     }
 }
+
 
 export{editItems, retrieveProduct, retrieveProducts, saveToCart, retrieveCart, deleteItems, addProduct, addProductImage};

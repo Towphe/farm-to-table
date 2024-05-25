@@ -20,6 +20,14 @@ function ProductList(){
       return (
         <main className="relative w-full h-full overflow-x-hidden gap-6 mt-10">
             <h1 className="w-screen h-auto text-center absolute top-4 block m-4 font-bold text-2xl">Product List</h1>
+            <div className="flex flex-shrink-0 flex-row gap-3 md:flex-row justify-center px-20">
+              <label for="sorting"> Sort by:</label>
+              <select className="font-semibold text-yellow-600" name="sorting" id="cars">
+                <option value="Alphabetical">Alphabetical</option>
+                <option value="Quantity">Quantity</option>
+                <option value="Price">Price</option>
+              </select>
+            </div>
             <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-3 md:flex-col justify-center mt-24">
                 <table className="w-3/4 text-md text-left rtl:text-right text-slate-800">
                   <thead className="text-md text-slate-800 uppercase ">

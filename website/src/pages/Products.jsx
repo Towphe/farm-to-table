@@ -29,7 +29,7 @@ function Products(){
         await axios.post(`http://localhost:3000/api/shopping-cart`, {
           productName: product.name,
           productId: product._id,
-          price: product.price,
+          price: parseFloat(product.price),
           quantity: product.quantity
         }, {withCredentials: true});
       };
@@ -50,9 +50,6 @@ function Products(){
                 <button data-product-id={"button-" + product._id} onClick={addToCart} className='shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2 hover:opacity-75'>Add to Cart</button>
               </div> 
             ))}
-            <div className='md:ml-10 flex place-self-start'>
-            <Link to="/Shopping-Cart"className='m-5 shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2 absolute top-20'>Shopping Cart</Link>
-            </div>        
           </div>
           <ul className="absolute w-screen text-center bottom-4 text-xl">
             {Array.from({length: pageCount}, (v, k) => k+1).map((n) => <li key={n}><Link to={`/products?p=${n}&c=${10}`}>{n}</Link></li>)}
