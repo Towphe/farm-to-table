@@ -110,7 +110,7 @@ function CheckoutView()
             <label className="block text-black text-md mb-2" for="pay"> 
               Cash Amount <span className="text-red-500">*</span>
             </label>
-            <input name="payment" onChange={handleChange} className={`shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${!isCashOnDelivery ? 'pointer-events-none opacity-50' : ''}`} id="pay" type="number" min='0' placeholder={`> ${total}`} required={isCashOnDelivery}/>
+            <input name="payment" onChange={handlePaymentChange} className={`shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${!isCashOnDelivery ? 'pointer-events-none opacity-50' : ''}`} id="pay" type="number" min='0' placeholder={`> ${total}`} required={isCashOnDelivery}/>
           </div>
         </div>
       </section>
