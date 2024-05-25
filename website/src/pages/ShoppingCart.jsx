@@ -7,15 +7,15 @@ import { useNavigate } from "react-router-dom";
 function ShoppingCart() {
     const [items, setItems] = useState([]);
     const [total, setTotal] = useState(0);
-    // const {role} = useAuth();
-    // const navigate = useNavigate();
+    const {role} = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
 
-        // if (role === undefined) {
-        //     navigate("/", {replace: true});
-        //     return;
-        // }
+        if (role === undefined) {
+            navigate("/", {replace: true});
+            return;
+        }
 
         axios.get(`http://localhost:3000/api/shopping-cart`)
             .then(response => {
