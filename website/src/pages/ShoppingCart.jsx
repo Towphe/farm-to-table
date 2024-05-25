@@ -12,10 +12,10 @@ function ShoppingCart() {
 
     useEffect(() => {
 
-        if (role === undefined) {
-            navigate("/", {replace: true});
-            return;
-        }
+        // if (role === undefined) {
+        //     navigate("/", {replace: true});
+        //     return;
+        // }
 
         axios.get(`http://localhost:3000/api/shopping-cart`)
             .then(response => {

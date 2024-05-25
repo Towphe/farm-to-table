@@ -54,11 +54,18 @@ function CheckoutView()
 
   useEffect(() => 
   {
+    const isFormValid = Object.values(OrderDetails).every(value => value.trim() !== '');
+    setFormValid(isFormValid && payment >= total);
+  }, [OrderDetails, payment, total]);
+
+  useEffect(() => 
+  {
     // if (role === undefined) 
     // {
     //     navigate("/", {replace: true});
     //     return;
-    // } 
+    // }
+     
     axios.get(`http://localhost:3000/api/shopping-cart`)
         .then(response => 
         {
@@ -71,12 +78,6 @@ function CheckoutView()
             setTotal(t);
         });
   }, []);
-
-  useEffect(() => 
-  {
-    const isFormValid = Object.values(OrderDetails).every(value => value.trim() !== '');
-    setFormValid(isFormValid && payment >= total);
-  }, [OrderDetails, payment, total]);
 
   return (
     <main className="flex flex-col min-h-screen bg-gray-100 p-4">
