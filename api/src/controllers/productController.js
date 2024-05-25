@@ -43,7 +43,7 @@ const retrieveProduct = async (req, res) => {
     res.send(product);
 };
 
-const retrieveProducts = async (req, res) => {
+ const retrieveProducts = async (req, res) => {
     const p = isUndefined(req.query.p) ? 1 : parseInt(req.query.p);
     const c = isUndefined(req.query.c) ? 10 : parseInt(req.query.c);
     const sort = req.query.sort || 'name';
