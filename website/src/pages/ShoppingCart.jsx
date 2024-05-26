@@ -3,10 +3,12 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import { useAuth } from "../components/common/AuthProvider.jsx";
 import { useNavigate } from "react-router-dom";
+import LoadingScreen from "../components/common/LoadingScreen";
 
 function ShoppingCart() {
     const [items, setItems] = useState([]);
     const [total, setTotal] = useState(0);
+    const [isLoading, setAsLoading] = useState(true);
     const {role} = useAuth();
     const navigate = useNavigate();
 
@@ -25,12 +27,17 @@ function ShoppingCart() {
                     t += Number(item.price["$numberDecimal"])
                 });
                 setTotal(t);
+                setAsLoading(false);
             });
     }, [items]);
 
     const handleDelete = (itemId) => {
         axios.delete(`http://localhost:3000/api/shopping-cart/${itemId}`)
     };
+
+    if (isLoading) {
+        return <LoadingScreen />
+    }
 
     return (
         <main className="relative w-full h-full overflow-x-hidden gap-6">
