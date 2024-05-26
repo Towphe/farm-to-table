@@ -31,7 +31,7 @@ function Products(){
         await axios.post(`http://localhost:3000/api/shopping-cart`, {
           productName: product.name,
           productId: product._id,
-          price: product.price,
+          price: parseFloat(product.price),
           quantity: product.quantity
         }, {withCredentials: true});
       };

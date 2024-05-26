@@ -5,28 +5,64 @@ import LoadingScreen from "../components/common/LoadingScreen";
 
 function ProductList(){
 
-    const [products, setProducts] = useState([]);
-    const [pageCount, setPageCount] = useState();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [isLoading, setIsLoading] = useState(true);
+  const [products, setProducts] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [sort, setSort] = useState(searchParams.get('sort') || 'name');
+  const [filter, setFilter] = useState(searchParams.get('filter') || '');
 
-    useEffect(() => {
-        axios.get(`http://localhost:3000/api/product?p=${searchParams.get('p') ?? 1}&c=${searchParams.get('c') ?? 10}`)
-          .then(response => {
-            setProducts(response.data.products);
-            setPageCount(response.data.pages);
-            setIsLoading(false);
-          })
-          .catch(error => console.error('Error fetching products:', error));
-      }, []);
+  const fetchProducts = () => {
+      const params = new URLSearchParams({
+          p: searchParams.get('p') ?? 1,
+          c: searchParams.get('c') ?? 10,
+          sort,
+          filter
+      });
 
-      if (isLoading){
-        return <LoadingScreen /> ;
-      }
+      axios.get(`http://localhost:3000/api/product?${params.toString()}`)
+        .then(response => {
+          setProducts(response.data.products);
+          setPageCount(response.data.pages);
+        })
+        .catch(error => console.error('Error fetching products:', error));
+  };
 
-      return (
-        <main className="relative w-full h-full overflow-x-hidden gap-6 mt-10">
-            <h1 className="w-screen h-auto text-center absolute top-4 block m-4 font-bold text-2xl">Product List</h1>
+  useEffect(() => {
+      fetchProducts();
+  }, [searchParams, sort, filter]);
+
+  const handleSortChange = (e) => {
+      setSort(e.target.value);
+      setSearchParams({ ...Object.fromEntries(searchParams), sort: e.target.value });
+  };
+
+  const handleFilterChange = (e) => {
+      setFilter(e.target.value);
+      setSearchParams({ ...Object.fromEntries(searchParams), filter: e.target.value });
+  };
+
+  return (
+      <main className="relative w-full h-full overflow-x-hidden gap-6 mt-10">
+          <h1 className="w-screen h-auto text-center absolute top-4 block m-4 font-bold text-2xl">Product List</h1>
+          <div className="flex flex-shrink-0 flex-row gap-3 md:flex-row justify-center px-20">
+              <label htmlFor="sorting"> Sort by:</label>
+              <select className="font-semibold text-yellow-600" name="sorting" id="sorting" value={sort} onChange={handleSortChange}>
+                  <option value="name">Alphabetical</option>
+                  <option value="quantity">Quantity</option>
+                  <option value="price">Price</option>
+              </select>
+
+              <label htmlFor="filtering"> Filter by Type:</label>
+              <input
+                  type="text"
+                  className="font-semibold text-yellow-600"
+                  name="filtering"
+                  id="filtering"
+                  value={filter}
+                  onChange={handleFilterChange}
+                  placeholder="Enter product type"
+              />
+            </div>
             <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-3 md:flex-col justify-center mt-24">
                 <table className="w-3/4 text-md text-left rtl:text-right text-slate-800">
                   <thead className="text-md text-slate-800 uppercase ">
@@ -83,7 +119,9 @@ function ProductList(){
                 </button>
             </div>
             <ul className="absolute w-screen text-center bottom-16 text-x3">
-            {Array.from({length: pageCount}, (v, k) => k+1).map((n) => <li key={n}><Link to={`/admin/products?p=${n}&c=${10}`}>{n}</Link></li>)}
+            {Array.from({length: pageCount}, (v, k) => k+1).map((n) => (<li key={n}>
+              <Link to={`/admin/products?p=${n}&c=${10}&sort=${sort}&filter=${filter}`}>{n}</Link>
+              </li>))}
             </ul>
         </main>
       );

@@ -41,7 +41,7 @@ function ShoppingCart() {
                     <div key={item._id} className="flex flex-col text-m flex-shrink-0 items-center justify-center shadow-md rounded-t-md border-black-50 bg-opacity-40 bg-green-300 p-2">
                         <div className="flex justify-between w-full p-2 space-x-3">
                             <span className="space-x-3">
-                                <Link to={`/products/${item._id}`}>{item.productName}</Link>
+                                <Link to={`/products/${item.productId}`}>{item.productName}</Link>
                                 <span className="text-gray-600 text-opacity-60 text-sm">{item.quantity}kg</span>
                             </span>
                             <span className="flex flex-row">P{Number(item.price["$numberDecimal"])}</span>
