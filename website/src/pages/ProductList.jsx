@@ -10,6 +10,7 @@ function ProductList(){
   const [searchParams, setSearchParams] = useSearchParams();
   const [sort, setSort] = useState(searchParams.get('sort') || 'name');
   const [filter, setFilter] = useState(searchParams.get('filter') || '');
+  const [isLoading, setAsLoading] = useState(true);
 
   const fetchProducts = () => {
       const params = new URLSearchParams({
@@ -29,6 +30,7 @@ function ProductList(){
 
   useEffect(() => {
       fetchProducts();
+      setAsLoading(false);
   }, [searchParams, sort, filter]);
 
   const handleSortChange = (e) => {
@@ -41,10 +43,14 @@ function ProductList(){
       setSearchParams({ ...Object.fromEntries(searchParams), filter: e.target.value });
   };
 
+  if (isLoading){
+    return <LoadingScreen />
+  }
+
   return (
-      <main className="relative w-full h-full overflow-x-hidden gap-6 mt-10">
-          <h1 className="w-screen h-auto text-center absolute top-4 block m-4 font-bold text-2xl">Product List</h1>
-          <div className="flex flex-shrink-0 flex-row gap-3 md:flex-row justify-center px-20">
+      <main className="relative w-full h-full overflow-x-hidden gap-6 pt-10">
+          <h1 className="w-screen h-auto text-center block m-4 font-bold text-2xl">Product List</h1>
+          <div className="flex flex-shrink-0 flex-row gap-3 md:flex-row justify-center px-20 pt-4">
               <label htmlFor="sorting"> Sort by:</label>
               <select className="font-semibold text-yellow-600" name="sorting" id="sorting" value={sort} onChange={handleSortChange}>
                   <option value="name">Alphabetical</option>
@@ -63,7 +69,7 @@ function ProductList(){
                   placeholder="Enter product type"
               />
             </div>
-            <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-3 md:flex-col justify-center mt-24">
+            <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-3 md:flex-col justify-center mt-16">
                 <table className="w-3/4 text-md text-left rtl:text-right text-slate-800">
                   <thead className="text-md text-slate-800 uppercase ">
                     <tr>

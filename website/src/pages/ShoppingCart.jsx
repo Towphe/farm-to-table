@@ -33,9 +33,9 @@ function ShoppingCart() {
     };
 
     return (
-        <main className="relative w-full h-full overflow-x-hidden gap-6 mt-10">
-            <h1 className="w-screen h-auto text-center absolute top-4 block m-4 font-bold text-3xl">Shopping Cart</h1>
-            <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-3 md:flex-col justify-center mt-24">
+        <main className="relative w-full h-full overflow-x-hidden gap-6">
+            <h1 className="w-screen h-auto text-center block mt-20 mb-2 font-bold text-3xl">Shopping Cart</h1>
+            <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-3 md:flex-col justify-center">
                 {
                     items.map((item) => (
                     <div key={item._id} className="flex flex-col text-m flex-shrink-0 items-center justify-center shadow-md rounded-t-md border-black-50 bg-opacity-40 bg-green-300 p-2">
@@ -58,7 +58,12 @@ function ShoppingCart() {
                     <span>Total:</span>
                     <span>P{total}</span>
                 </div>
+                {total === 0 ? <>
+                    <button className="flex justify-center items-center w-80 p-3 rounded-full shadow-sm bg-gray-700 text-off-white text-2xl font-bold cursor-not-allowed" disabled> Checkout</button>
+                </> : <>
                 <button className="flex justify-center items-center w-80 p-3 rounded-full shadow-sm bg-green-700 text-off-white text-2xl font-bold"> Checkout</button>
+                </>}
+                
             </div>
         </main>
     );
