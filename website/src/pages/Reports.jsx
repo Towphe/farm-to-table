@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import {DateTime} from "luxon";
+import LoadingScreen from "../components/common/LoadingScreen";
 
 function Reports() {
     // initialize reports
@@ -12,6 +13,7 @@ function Reports() {
     });
     const [totalIncome, setTotalIncome] = useState(0);
     const [timeRange, setRange] = useState("week");
+    const [isLoading, setIsLoading] = useState(true);
 
     // get reports
     useEffect(() => {
@@ -25,7 +27,7 @@ function Reports() {
                     cancelled: response.data.orderTally.cancelled
                 });
                 setTotalIncome(response.data.income);
-                
+                setIsLoading(false);
             });
     }, [timeRange]);
 
@@ -46,6 +48,11 @@ function Reports() {
         clicked: "block outline outline-slate-800 px-2 rounded-md font-semibold text-slate-50 bg-slate-800",
         unclicked: "block outline outline-slate-800 px-2 rounded-md font-semibold text-slate-800"
     }
+
+    if (isLoading){
+        return <LoadingScreen />;
+    }
+
     // display reports
     return (
         <main className="w-full h-full flex flex-col pt-16 items-center gap-12">
