@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import LoadingScreen from "../components/common/LoadingScreen";
+import { useAuth } from "../components/common/AuthProvider";
 
 function Products(){
 
     const [products, setProducts] = useState([]);
     const [pageCount, setPageCount] = useState();
     const [isLoading, setIsLoading] = useState(true);
+    const {role} = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get('http://localhost:3000/api/product')
@@ -24,14 +27,20 @@ function Products(){
       };
 
       const addToCart = async (e) => {
+
+        // if user is unauthenticated, renavigate to signin
+        if (role === undefined){
+          navigate("/sign-in", {replace: true});
+          return;
+        }
         
         const productId = e.target.getAttribute('data-product-id').split("-")[1];
         const product = products.filter((p) => p._id == productId)[0];
-        
+        console.log(product.price);
         await axios.post(`http://localhost:3000/api/shopping-cart`, {
           productName: product.name,
           productId: product._id,
-          price: parseFloat(product.price),
+          price: parseFloat(product.price['$numberDecimal']),
           quantity: product.quantity
         }, {withCredentials: true});
       };
@@ -51,7 +60,7 @@ function Products(){
                   <span>
                   <Link to={`/products/${product._id}`}>{product.name}</Link>
                   </span>
-                  <td>₱ {product.price["$numberDecimal"]}</td>
+                  <span>₱ {product.price["$numberDecimal"]}</span>
                 </div>
                 <button data-product-id={"button-" + product._id} onClick={addToCart} className='shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2 hover:opacity-75'>Add to Cart</button>
               </div> 
