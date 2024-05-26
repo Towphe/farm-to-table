@@ -27,9 +27,9 @@ function AdminHomePage(){
     if (pendingCount === 0){
         return (
             <main className="w-full h-full flex flex-col pt-16 items-center gap-12 justify-center">
-                <div className="text-lg flex flex-col gap-6">
-                    <h2 className="text-3xl font-bold text-center">Welcome back!</h2>
-                    <span>As of {currentDate.monthLong} {currentDate.day}, {currentDate.year}, you have no orders.</span>
+                <div className="text-lg sm:text-2xl flex flex-col gap-6 text-center">
+                    <h2 className="text-5xl sm:text-6xl font-bold text-center">Welcome back!</h2>
+                    <span>As of {currentDate.monthLong} {currentDate.day}, {currentDate.year}, you have no new orders.</span>
                 </div>
             </main>
         )
