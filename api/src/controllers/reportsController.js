@@ -74,6 +74,7 @@ const retrieveBasicReport = async (req, res) => {
     ]);
     
     orders.map((order) => {
+        // try to not add to tally if order was cancelled
         order.items.map((product) => {
             if (productTally[product.detail[0]._id] === undefined){
                 // product not yet in tally
@@ -111,7 +112,6 @@ const retrieveBasicReport = async (req, res) => {
         return b.count - a.count;
     })
 
-
     return res.send({
         productTally: sortedTally.slice(0,10),
         orderTally: {
@@ -123,4 +123,65 @@ const retrieveBasicReport = async (req, res) => {
     });
 }
 
-export {retrieveBasicReport};
+const retrieveHomepageReport = async (req, res) => {
+    // const orders = await OrderTransaction.find({status: 1});
+    const orders = await OrderTransaction.aggregate([
+        {
+            $match: {
+                status: 0
+            }
+        },
+        {
+            $lookup: {
+                from: "orderitems",
+                localField: "_id",
+                foreignField: "transactionId",
+                as: "items",
+                pipeline: [
+                    {
+                        $unwind: {path: "$orderitems", preserveNullAndEmptyArrays: true}
+                    },
+                    {
+                        $lookup : {
+                            from: "products",
+                            localField: "productId",
+                            foreignField: "_id",
+                            as: "detail"
+                        }
+                    }
+                ]
+            }
+        }
+    ]);
+
+    let productTally = {}
+
+    orders.map((order) => {
+        // map every product in order,
+        // then add product to tally
+        order.items.map((product) => {
+            if (productTally[product.detail[0]._id] === undefined){
+                // product not yet in tally
+                productTally[product.detail[0]._id] = {
+                    name: product.detail[0].name,
+                    count: 1
+                };
+            } else{
+                // product already in tally
+                productTally[product.detail[0]._id].count += 1;
+            }
+        });
+    });
+
+    let sortedTally = [];
+    for (var product in productTally)    {
+        sortedTally.push({id: product, name: productTally[product].name, count: productTally[product].count});
+    }
+
+    return res.send({
+        pendingCount: orders.length,
+        topProducts: sortedTally.slice(0, 5)
+    });
+}
+
+export {retrieveBasicReport, retrieveHomepageReport};

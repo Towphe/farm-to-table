@@ -17,8 +17,8 @@ function CustomerNavBar(){
     ];
 
     return (
-        <nav className="flex justify-around py-2 bg-smooth-yellow text-off-white md:gap-x-60 absolute top-0 w-screen">
-            <h1 className="block text-2xl font-bold"><a href="/">Farm-To-Table</a></h1>
+        <nav className="flex justify-around py-2 shadow-lg text-off-white md:gap-x-60 absolute top-0 w-screen bg-smooth-yellow">
+            <h1 className="block text-2xl font-bold"><a href="/">Hapag-Taniman</a></h1>
             <div className="flex gap-4">
                 {
                     pages.map((page) => {
