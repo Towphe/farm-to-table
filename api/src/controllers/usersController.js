@@ -19,7 +19,6 @@ const viewUser = async (req, res) => {
     res.send( await User.find({}));
 }
 
-
 const updateUser = async (req, res) => {
     if (req.user.userType !== 'ADMIN'){
         res.statusCode = 403;

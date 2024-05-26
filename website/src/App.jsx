@@ -14,6 +14,8 @@ import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/Signup.jsx'
 import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
+import UserList from './pages/UserList.jsx'
+import UserDetails from './pages/UserDetails.jsx'
 
 function App(){
 
@@ -33,6 +35,14 @@ function App(){
                 {
                     path: 'sign-up',
                     element: <SignUp />
+                },
+                {
+                    path: 'user-list',
+                    element: <UserList />
+                },
+                {
+                    path: 'user/:id',
+                    element: <UserDetails />
                 }
             ]
         },
