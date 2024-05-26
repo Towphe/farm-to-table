@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import LoadingScreen from "../components/common/LoadingScreen";
+import { useAuth } from "../components/common/AuthProvider";
 
 function Products(){
 
     const [products, setProducts] = useState([]);
     const [pageCount, setPageCount] = useState();
     const [isLoading, setIsLoading] = useState(true);
+    const {role} = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get('http://localhost:3000/api/product')
@@ -24,6 +27,12 @@ function Products(){
       };
 
       const addToCart = async (e) => {
+
+        // if user is unauthenticated, renavigate to signin
+        if (role === undefined){
+          navigate("/sign-in", {replace: true});
+          return;
+        }
         
         const productId = e.target.getAttribute('data-product-id').split("-")[1];
         const product = products.filter((p) => p._id == productId)[0];
