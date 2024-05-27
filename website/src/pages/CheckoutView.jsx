@@ -85,7 +85,7 @@ function CheckoutView()
     <main className="flex flex-col min-h-screen bg-gray-100 p-4">
       <h1 className="text-2xl font-bold mb-4">Checkout</h1>
       <section className="flex flex-col border border-gray-300 rounded-md p-4 mb-4">
-        <h2 className="text-lg font-bold mb-2">Items</h2>
+        <h2 className="text-lg mb-2 font-bold">Items</h2>
         {items.map((item) => 
         (
           <div key={item._id} className="flex mb-2">
@@ -96,7 +96,7 @@ function CheckoutView()
             </p>
           </div>
         ))}
-
+        <hr class="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700"/>
         <div className="flex mb-2 font-semibold">
           <p className="w-1/2 text-black-700 truncate">TOTAL :</p>
           <p className="w-1/2 text-right text-black-700">₱{total}</p>
