@@ -79,6 +79,7 @@ function CheckoutView()
         });
   }, []);
 
+  // place here yung post request galing sa order
   return (
     <main className="flex flex-col min-h-screen bg-gray-100 p-4">
       <h1 className="text-2xl font-bold mb-4">Checkout</h1>
@@ -87,14 +88,17 @@ function CheckoutView()
         {items.map((item) => 
         (
           <div key={item._id} className="flex mb-2">
+            <p className="w-9 text-green-700 font-bold">{item.quantity}x</p>
             <p className="w-1/2 text-gray-700 truncate">{item.productName}</p>
-            <p className="w-1/2 text-right font-medium text-gray-700">{item.quantity}x  ₱{Number(item.price["$numberDecimal"])}</p>
+            <p className="w-1/2 text-right font-medium text-green-700">
+              + ₱{Number(item.price["$numberDecimal"])}
+            </p>
           </div>
         ))}
 
         <div className="flex mb-2 font-semibold">
-          <p className="w-1/2 text-black-700 truncate">TOTAL:</p>
-          <p className="w-1/2 text-black-700 truncate">₱{total}</p>
+          <p className="w-1/2 text-black-700 truncate">TOTAL :</p>
+          <p className="w-1/2 text-right text-black-700">₱{total}</p>
         </div>
       </section>
       <section className="flex flex-col border border-gray-300 rounded-md p-4 mb-4">

@@ -14,10 +14,10 @@ function ShoppingCart() {
 
     useEffect(() => {
 
-        if (role === undefined) {
-            navigate("/", {replace: true});
-            return;
-        }
+        // if (role === undefined) {
+        //     navigate("/", {replace: true});
+        //     return;
+        // }
 
         axios.get(`http://localhost:3000/api/shopping-cart`)
             .then(response => {
@@ -68,7 +68,7 @@ function ShoppingCart() {
                 {total === 0 ? <>
                     <button className="flex justify-center items-center w-80 p-3 rounded-full shadow-sm bg-gray-700 text-off-white text-2xl font-bold cursor-not-allowed" disabled> Checkout</button>
                 </> : <>
-                <button className="flex justify-center items-center w-80 p-3 rounded-full shadow-sm bg-green-700 text-off-white text-2xl font-bold"> Checkout</button>
+                <Link to="/checkout-view" className="flex justify-center items-center w-80 p-3 rounded-full shadow-sm bg-green-700 text-off-white text-2xl font-bold"> Checkout</Link>
                 </>}
                 
             </div>
