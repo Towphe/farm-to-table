@@ -80,6 +80,7 @@ function CheckoutView()
   }, []);
 
   // place here yung post request galing sa order
+  // if successful, delete lahat ng items sa shopping cart
   return (
     <main className="flex flex-col min-h-screen bg-gray-100 p-4">
       <h1 className="text-2xl font-bold mb-4">Checkout</h1>

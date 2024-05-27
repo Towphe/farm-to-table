@@ -5,6 +5,8 @@ import { useAuth } from "../components/common/AuthProvider.jsx";
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../components/common/LoadingScreen";
 
+//Jaco: Nagkakaroon ng while-loop error dito pagkapunta ko sa shopping cart view
+// for context, sa api terminal, paulit-ulit nag-iiterate yung mga added items sa shopping cart.
 function ShoppingCart() {
     const [items, setItems] = useState([]);
     const [total, setTotal] = useState(0);
@@ -51,7 +53,7 @@ function ShoppingCart() {
                                 <Link to={`/products/${item.productId}`}>{item.productName}</Link>
                                 <span className="text-gray-600 text-opacity-60 text-sm">{item.quantity}kg</span>
                             </span>
-                            <span className="flex flex-row">P{Number(item.price["$numberDecimal"])}</span>
+                            <span className="flex flex-row">₱{Number(item.price["$numberDecimal"])}</span>
                             <span>
                                 <button onClick={() => handleDelete(item._id)} className="flex items-center gap-2 text-red-500">
                                     <img src="https://png.pngtree.com/png-vector/20190326/ourmid/pngtree-vector-trash-icon-png-image_865253.jpg" alt="Delete" style={{ width: '20px', height: '20px' }} />
@@ -63,7 +65,7 @@ function ShoppingCart() {
                 }
                 <div className="flex justify-between space-x-40 text-1xl">
                     <span>Total:</span>
-                    <span>P{total}</span>
+                    <span>₱{total}</span>
                 </div>
                 {total === 0 ? <>
                     <button className="flex justify-center items-center w-80 p-3 rounded-full shadow-sm bg-gray-700 text-off-white text-2xl font-bold cursor-not-allowed" disabled> Checkout</button>
