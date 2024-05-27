@@ -1,28 +1,75 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {Link, useSearchParams} from 'react-router-dom';
+import LoadingScreen from "../components/common/LoadingScreen";
 
 function ProductList(){
 
-    const [products, setProducts] = useState([]);
-    const [pageCount, setPageCount] = useState();
-    const [searchParams, setSearchParams] = useSearchParams();
+  const [products, setProducts] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [sort, setSort] = useState(searchParams.get('sort') || 'name');
+  const [filter, setFilter] = useState(searchParams.get('filter') || '');
+  const [isLoading, setAsLoading] = useState(true);
 
-    useEffect(() => {
-        axios.get(`http://localhost:3000/api/product?p=${searchParams.get('p') ?? 1}&c=${searchParams.get('c') ?? 10}`)
-          .then(response => {
-            console.log(response);
-            setProducts(response.data.products);
-            setPageCount(response.data.pages)
-          })
-          .catch(error => console.error('Error fetching products:', error));
-      }, []);
+  const fetchProducts = () => {
+      const params = new URLSearchParams({
+          p: searchParams.get('p') ?? 1,
+          c: searchParams.get('c') ?? 10,
+          sort,
+          filter
+      });
 
-      return (
-        // <main className="relative flex flex-col w-full h-full justify-center items-center">
-        <main className="relative w-full h-full overflow-x-hidden gap-6 mt-10">
-            <h1 className="w-screen h-auto text-center absolute top-4 block m-4 font-bold text-2xl">Product List</h1>
-            <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-3 md:flex-col justify-center mt-24">
+      axios.get(`http://localhost:3000/api/product?${params.toString()}`)
+        .then(response => {
+          setProducts(response.data.products);
+          setPageCount(response.data.pages);
+        })
+        .catch(error => console.error('Error fetching products:', error));
+  };
+
+  useEffect(() => {
+      fetchProducts();
+      setAsLoading(false);
+  }, [searchParams, sort, filter]);
+
+  const handleSortChange = (e) => {
+      setSort(e.target.value);
+      setSearchParams({ ...Object.fromEntries(searchParams), sort: e.target.value });
+  };
+
+  const handleFilterChange = (e) => {
+      setFilter(e.target.value);
+      setSearchParams({ ...Object.fromEntries(searchParams), filter: e.target.value });
+  };
+
+  if (isLoading){
+    return <LoadingScreen />
+  }
+
+  return (
+      <main className="relative w-full h-full overflow-x-hidden gap-6 pt-10">
+          <h1 className="w-screen h-auto text-center block m-4 font-bold text-2xl">Product List</h1>
+          <div className="flex flex-shrink-0 flex-row gap-3 md:flex-row justify-center px-20 pt-4">
+              <label htmlFor="sorting"> Sort by:</label>
+              <select className="font-semibold text-yellow-600" name="sorting" id="sorting" value={sort} onChange={handleSortChange}>
+                  <option value="name">Alphabetical</option>
+                  <option value="quantity">Quantity</option>
+                  <option value="price">Price</option>
+              </select>
+
+              <label htmlFor="filtering"> Filter by Type:</label>
+              <input
+                  type="text"
+                  className="font-semibold text-yellow-600"
+                  name="filtering"
+                  id="filtering"
+                  value={filter}
+                  onChange={handleFilterChange}
+                  placeholder="Enter product type"
+              />
+            </div>
+            <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-3 md:flex-col justify-center mt-16">
                 <table className="w-3/4 text-md text-left rtl:text-right text-slate-800">
                   <thead className="text-md text-slate-800 uppercase ">
                     <tr>
@@ -50,9 +97,11 @@ function ProductList(){
                           <td>₱ {product.price["$numberDecimal"]}</td>
                           <td className="hover:cursor-pointer">
                             <button>
+                              <Link to={`/admin/edit-product/${product._id}`}>
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                               </svg>
+                              </Link>
                             </button>
                           </td>
                           <td className=" text-gray-400">
@@ -68,13 +117,17 @@ function ProductList(){
                   </tbody>
                 </table>
                 <button className="mt-4 hover:opacity-80">
+                  <Link to={`/admin/add-product`}>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
+                  </Link>
                 </button>
             </div>
             <ul className="absolute w-screen text-center bottom-16 text-x3">
-            {Array.from({length: pageCount}, (v, k) => k+1).map((n) => <li key={n}><Link to={`/admin/products?p=${n}&c=${10}`}>{n}</Link></li>)}
+            {Array.from({length: pageCount}, (v, k) => k+1).map((n) => (<li key={n}>
+              <Link to={`/admin/products?p=${n}&c=${10}&sort=${sort}&filter=${filter}`}>{n}</Link>
+              </li>))}
             </ul>
         </main>
       );

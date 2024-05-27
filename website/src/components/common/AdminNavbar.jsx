@@ -22,7 +22,7 @@ function AdminNavBar(){
 
     return (
         <nav className="flex justify-around py-2 bg-smooth-yellow text-off-white md:gap-x-60 absolute top-0 w-screen">
-            <h1 className="block text-2xl font-bold"><a href="/admin">Farm-To-Table</a></h1>
+            <h1 className="block text-2xl font-bold"><a href="/admin">Hapag-Taniman</a></h1>
             <div className="flex gap-4">
                 {
                     pages.map((page) => {
