@@ -1,30 +1,14 @@
 import mongoose from "mongoose";
+import OrderTransaction from "../models/OrderTransaction.js";
+import OrderItem from "../models/OrderItem.js";
+import {DateTime} from "luxon";
+import ShoppingCart from "../models/ShoppingCart.js";
+import Product from "../models/Product.js";
+import User from "../models/User.js";
 
 await mongoose.connect(process.env.MONGO_KEY, 
 {
     useNewUrlParser: true, useUnifiedTopology: true
-});
-
-// order schema
-const OrderTransaction = mongoose.model('Order',
-{
-    email: String,
-    status: Number,
-    totalPrice: Number,
-    createdAt: Date,
-    street : String,
-    brgy: String,
-    city : String,
-    province : String
-});
-
-// order item schema
-const OrderItem = mongoose.model('OrderItem',
-{
-    transactionId: String,  // refers to transaction
-    productId : String,     // refers to product
-    quantity: Number,
-    price: Number
 });
 
 const isUndefined = (element) =>
@@ -86,19 +70,34 @@ const createOrder = async (req, res) =>
 {
     // create order transaction
     // include email, status, totalprice, date, street, brgy, city, and province details from ordertransaction model
+    const user = await User.find({_id: req.user.userId});
+    const shoppingCart = await ShoppingCart.find({userId: user._id});
+    let orderTransaction;
+
+    //create initial order
     await OrderTransaction.create(
     {
-        email: req.body.email,
-        status: req.body.status,
+        email: user._id,
+        status: 0,
         totalPrice: req.body.totalPrice,
-        createdAt: req.body.createdAt,
+        createdAt: DateTime.now().toJSDate(),
         street : req.body.street,
         brgy: req.body.brgy,
         city : req.body.city,
         province : req.body.province
+    }).then(res => orderTransaction = res);
+
+    shoppingCart.map(async (item) => {
+        await OrderItem.create({
+            transactionId: orderTransaction._id,  // refers to transaction
+            productId : item.productId,     // refers to product
+            quantity: item.quantity,
+            price: item.price
+        });
+        await ShoppingCart.findByIdAndDelete(item._id);
     });
 
-    return res.json({ message: 'Order Created.'});
+    return res.json({ transactionId: orderTransaction._id });
 };
 
 const confirmOrder = async (req, res) => 

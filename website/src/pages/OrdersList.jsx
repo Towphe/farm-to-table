@@ -1,9 +1,20 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {Link} from 'react-router-dom';
+import { useAuth } from "../components/common/AuthProvider.jsx";
+import { useNavigate } from "react-router-dom";
 
-function OrdersList()
-{
+function OrdersList(){
+    const {role} = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (role === undefined) {
+            navigate("/sign-in", {replace: true});
+            return;
+        }
+    }, [])
+
     const orders = 
     [
         {transactionId: 134290, item: 'Chips', qty: 10}, 
@@ -32,7 +43,7 @@ function OrdersList()
     //   }, []);
       
       return (
-        <main className="relative w-full h-full overflow-x-hidden gap-6 mt-10">
+        <main className="relative w-full h-full overflow-x-hidden gap-6">
             <h1 className="w-screen h-auto text-center absolute top-6 block font-bold text-2xl"> Order List </h1>
             <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-5 md:flex-col justify-center mt-24">
                 {orders.map((order) => 

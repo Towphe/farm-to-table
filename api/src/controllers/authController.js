@@ -1,21 +1,13 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import User from "../models/User.js";
 
 await mongoose.connect(process.env.MONGO_KEY, {
     useNewUrlParser: true, useUnifiedTopology: true
 });
 
 const TOKEN_EXPIRY_TIME = 604800;   // 1 week (in seconds)
-
-const User = mongoose.model('users', {
-    firstName : String,
-    middleName : String,
-    lastName : String,
-    userType : String,
-    email : String,
-    password : String
-});
 
 const index = (req, res) => {
     res.send("Welcome to index");
