@@ -10,7 +10,7 @@ function UserDetails() {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const response = await axios.get(``);
+            const response = await axios.get(`http://localhost:3000/api/admin/user/${id}`);
             setUser(response.data);
         };
         fetchUser();

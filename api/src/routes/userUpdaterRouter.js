@@ -3,7 +3,7 @@ import { authenticateJWT } from "../middleware/authMiddleware";
 
 const userUpdateRouter = (app) =>{
     app.get('/authenticateJWT', authenticateJWT);
-    app.patch('/updateUser', updateUser); 
+    app.patch('/admin/updateUser', updateUser); 
 };
 
 export default userUpdateRouter;

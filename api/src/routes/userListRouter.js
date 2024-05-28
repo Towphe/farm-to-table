@@ -3,7 +3,7 @@ import { authenticateJWT } from '../middleware/authMiddleware.js'
 
 const userListRouter = (app) =>{
     app.get('/authenticateJWT', authenticateJWT);
-    app.get('/viewUser', viewUser); 
+    app.get('/admin/viewUser', viewUser); 
 };
 
 export default userListRouter;
