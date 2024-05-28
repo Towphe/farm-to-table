@@ -35,13 +35,13 @@ function UserList() {
     return (
         <>
             <AdminNavBar />
-            <main className="w-full h-full flex flex-col items-center">
-                <h2 className="text-xl font-bold mb-4">User List</h2>
-                <ul className="max-w-md space-y-1 text-gray-500 list-none list-inside dark:text-gray-400">
+            <main className="w-full h-full flex justify-center items-center">
+                <h2 className="text-xl font-bold mb-4 mt-4 text-black">User List</h2>
+                <ul className="max-w-md space-y-4 list-none">
                     {currentUsers.map((user, index) => (
                         <li key={index} className="bg-green-100 p-4 rounded-lg flex justify-between items-center">
-                            <span>Email: {user.email}</span>
-                            <Link to={`/admin/user/${user.id}`} className="text-blue-500">
+                            <span className="text-gray-900"><strong>Email:</strong> {user.email}</span>
+                            <Link to={`/user/${user.id}`} className="text-blue-500">
                                 Show More
                             </Link>
                         </li>
@@ -52,7 +52,10 @@ function UserList() {
                         <button
                             key={number}
                             onClick={() => handlePageClick(number)}
-                            className={`px-3 py-1 rounded ${currentPage === number ? 'bg-yellow-500 text-white' : 'bg-gray-300 text-gray-700'}`}
+                            className={`px-3 py-1 rounded ${
+                                currentPage === number
+                                    ? 'bg-yellow-500 text-black' : 'bg-gray-300 text-gray-700'
+                            }`}
                         >
                             {number}
                         </button>
@@ -64,4 +67,4 @@ function UserList() {
     );
 }
 
-export default UserList;
+export default UserList
