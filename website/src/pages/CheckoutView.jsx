@@ -79,12 +79,44 @@ function CheckoutView()
         });
   }, []);
 
+  const ordersuccess = async () =>
+  {
+    try 
+    {
+      const currentDate = new Date();
+
+      const formattedDate = currentDate.toLocaleDateString('en-US',
+      {
+          month: '2-digit',
+          day: '2-digit',
+          year: 'numeric'
+      });
+
+      const saveOrderDetails = await axios.post('http://localhost:3000/api/order/create-order',
+      {
+        status: 1,
+        totalPrice: total,
+        createdAt: formattedDate,
+        house_num: OrderDetails.house_num,
+        street : OrderDetails.street,
+        brgy: OrderDetails.brgy,
+        city : OrderDetails.city,
+        province : OrderDetails.province
+      });
+    } 
+    
+    catch (error)
+    {
+
+    }
+  };
+
   // place here yung post request galing sa order
   // if successful, delete lahat ng items sa shopping cart
   return (
     <main className="flex flex-col min-h-screen bg-gray-100 p-4">
       <h1 className="text-2xl font-bold mb-4">Checkout</h1>
-      <section className="flex flex-col border border-gray-300 rounded-md p-4 mb-4">
+      <section className="flex flex-col border border-gray-400 rounded-md p-4 mb-4">
         <h2 className="text-lg mb-2 font-bold">Items</h2>
         {items.map((item) => 
         (
@@ -102,7 +134,7 @@ function CheckoutView()
           <p className="w-1/2 text-right text-black-700">₱{total}</p>
         </div>
       </section>
-      <section className="flex flex-col border border-gray-300 rounded-md p-4 mb-4">
+      <section className="flex flex-col border border-gray-400 rounded-md p-4 mb-4">
         <h2 className="text-lg font-semibold mb-2">Payment Method</h2>
         <div className="flex flex-row items-start justify-left gap-7">
           <input type="checkbox" id="flowbite-option" className="hidden peer" checked={isCashOnDelivery} onChange={() => setIsCashOnDelivery(!isCashOnDelivery)}/>
@@ -120,7 +152,7 @@ function CheckoutView()
           </div>
         </div>
       </section>
-      <section className="flex flex-col border border-gray-300 rounded-md p-4 mb-4">
+      <section className="flex flex-col border border-gray-400 rounded-md p-4 mb-4">
       <h2 className="text-lg font-semibold mb-2">Delivery Info</h2>
       <div className="mb-4">
         <label className="block text-gray-700 text-md mb-2" for="house-number">
@@ -153,7 +185,7 @@ function CheckoutView()
         <input name="province" onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="province" type="text" placeholder="e.g., Quezon" required/>
       </div>
       </section>
-      <Link to="/success" className={`bg-green-700 hover:bg-green-400 text-white font-bold py-2 px-4 rounded-full inline-flex justify-center items-center w-full ${!formValid ? 'pointer-events-none opacity-50' : ''}`}>
+      <Link to="/success" onClick={ordersuccess} className={`bg-green-700 hover:bg-green-400 text-white font-bold py-2 px-4 rounded-full inline-flex justify-center items-center w-full ${!formValid ? 'pointer-events-none opacity-50' : ''}`}>
         Order 
       </Link>
     </main>
