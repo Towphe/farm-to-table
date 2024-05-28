@@ -5,8 +5,6 @@ import { useAuth } from "../components/common/AuthProvider.jsx";
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../components/common/LoadingScreen";
 
-//Jaco: Nagkakaroon ng while-loop error dito pagkapunta ko sa shopping cart view
-// for context, sa api terminal, paulit-ulit nag-iiterate yung mga added items sa shopping cart.
 function ShoppingCart() {
     const [items, setItems] = useState([]);
     const [total, setTotal] = useState(0);
@@ -15,11 +13,10 @@ function ShoppingCart() {
     const navigate = useNavigate();
 
     useEffect(() => {
-
-        // if (role === undefined) {
-        //     navigate("/", {replace: true});
-        //     return;
-        // }
+        if (role === undefined) {
+            navigate("/", {replace: true});
+            return;
+        }
 
         axios.get(`http://localhost:3000/api/shopping-cart`)
             .then(response => {
