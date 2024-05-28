@@ -13,7 +13,6 @@ function ShoppingCart() {
     const navigate = useNavigate();
 
     useEffect(() => {
-
         if (role === undefined) {
             navigate("/", {replace: true});
             return;
@@ -51,7 +50,7 @@ function ShoppingCart() {
                                 <Link to={`/products/${item.productId}`}>{item.productName}</Link>
                                 <span className="text-gray-600 text-opacity-60 text-sm">{item.quantity}kg</span>
                             </span>
-                            <span className="flex flex-row">P{Number(item.price["$numberDecimal"])}</span>
+                            <span className="flex flex-row">₱{Number(item.price["$numberDecimal"])}</span>
                             <span>
                                 <button onClick={() => handleDelete(item._id)} className="flex items-center gap-2 text-red-500">
                                     <img src="https://png.pngtree.com/png-vector/20190326/ourmid/pngtree-vector-trash-icon-png-image_865253.jpg" alt="Delete" style={{ width: '20px', height: '20px' }} />
@@ -63,12 +62,12 @@ function ShoppingCart() {
                 }
                 <div className="flex justify-between space-x-40 text-1xl">
                     <span>Total:</span>
-                    <span>P{total}</span>
+                    <span>₱{total}</span>
                 </div>
                 {total === 0 ? <>
                     <button className="flex justify-center items-center w-80 p-3 rounded-full shadow-sm bg-gray-700 text-off-white text-2xl font-bold cursor-not-allowed" disabled> Checkout</button>
                 </> : <>
-                <button className="flex justify-center items-center w-80 p-3 rounded-full shadow-sm bg-green-700 text-off-white text-2xl font-bold"> Checkout</button>
+                <Link to="/checkout-view" className="flex justify-center items-center w-80 p-3 rounded-full shadow-sm bg-green-700 text-off-white text-2xl font-bold"> Checkout</Link>
                 </>}
                 
             </div>

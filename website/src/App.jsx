@@ -23,6 +23,9 @@ import AuthProvider from "./components/common/AuthProvider.jsx";
 import axios from 'axios'
 import Reports from './pages/Reports.jsx'
 import AdminHomePage from './pages/AdminHomepage.jsx'
+import CheckoutView from './pages/CheckoutView.jsx'
+import OrderSuccess from './pages/SuccessView.jsx'
+import OrdersList from './pages/OrdersList.jsx'
 
 
 const router = createBrowserRouter([
@@ -53,7 +56,19 @@ const router = createBrowserRouter([
             {
                 path: 'shopping-cart',
                 element: <ShoppingCart/>
-            }
+            },
+            {
+                path: 'orders',
+                element: <OrdersList/>
+            },
+            {
+                path: 'checkout-view',
+                element: <CheckoutView/>
+            },
+            {
+                path: 'success',
+                element: <OrderSuccess/>
+            },
         ]
     },
     {
