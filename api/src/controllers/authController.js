@@ -1,22 +1,13 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import bodyParser from "body-parser";
+import User from "../models/User.js";
 
 await mongoose.connect(process.env.MONGO_KEY, {
     useNewUrlParser: true, useUnifiedTopology: true
 });
 
-const User = mongoose.model('users', {
-    firstName : String,
-    middleName : String,
-    lastName : String,
-    userType : String,
-    email : String,
-    password : String
-});
-
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+const TOKEN_EXPIRY_TIME = 604800;   // 1 week (in seconds)
 
 const index = (req, res) => {
     res.send("Welcome to index");
@@ -28,7 +19,7 @@ const signup = async (req, res) => {
     let user = await User.findOne({email: req.body.email});
     
     // check if user exists
-    if (user != null){
+    if (user){
         res.statusCode = 400;
         res.send({'detail' : 'Email is already taken.'})
         return;
@@ -46,17 +37,32 @@ const signup = async (req, res) => {
     // save user to db
     await user.save();
 
-    // generate access token
-    const accessToken = jwt.sign({userId: user._id, userType: user.userType}, accessTokenSecret, {expiresIn: '30m'});
+    // generate access token & refresh token
+    const accessToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
+    const refreshToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '1d'});
     
-    res.statusCode = 202;
-    res.send({'detail': 'Sign up success.', 'token' : accessToken});
+    res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
+        maxAge: 1 * 30 * 60 * 1000
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000
+    });
+    res.statusCode = 200;
+    
+    res.send({'detail': 'Sign up success.', 'role' : user.userType});   // only role is stored manually by client
 };
 
 // signs user in
 const signin = async (req, res) => {
     let user = await User.findOne({email: req.body.email});
-    
+
     // check if user exists
     if (user == null){
         res.statusCode = 400;
@@ -74,17 +80,66 @@ const signin = async (req, res) => {
         return;
     }
     
-    // generate access token
-    const accessToken = jwt.sign({userId: user._id, userType: user.userType}, accessTokenSecret, {expiresIn: '30m'});
+    // generate access token & refresh token
+    const accessToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
+    const refreshToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '1d'});
     
-    console.log(jwt.verify(accessToken, accessTokenSecret));
+    res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
+        maxAge: 1 * 30 * 60 * 1000
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000
+    });
+    res.statusCode = 202;
+
+    res.send({'detail': 'Sign in success.', 'role' : user.userType});   // only role is stored manually by client
+}
+
+// refreshes access token
+const refreshToken = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken){
+        res.statusCode = 200;
+        return res.json({detail: "Unauthenticated"});
+    }
+
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err){
+            res.statusCode = 403;
+            return res.json({detail: "Unauthorized"});
+        }
+        // re-generate new access token
+        const accessToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1d'});
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            sameSite: 'None',
+            secure: true,
+            maxAge: 1 * 30 * 60 * 1000
+        });
+    })
+    res.statusCode = 202;
+    return res.json({detail: 'Successfully refreshed'});
+};
+
+// signs out user
+const signOut = (req, res) => {
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
 
     res.statusCode = 202;
-    res.send({'detail': 'Sign in success.', 'token' : accessToken});
+    return res.json({detail: 'Successfully logged out'});
 }
 
 const test = (req, res) => {
     res.send({'Hello' : 'world'});
 }
 
-export {signup, signin, test}
+export {signup, signin, test, refreshToken, signOut}

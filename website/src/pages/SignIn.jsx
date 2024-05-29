@@ -3,16 +3,23 @@ import axios from "axios";
 import CustomerNavBar from "../components/common/CustomerNavbar";
 import Footer from "../components/common/Footer";
 import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../components/common/AuthProvider";
+import {DateTime} from 'luxon';
 
 function SignIn(){
     const [loginData, setLoginData] = useState({
         email: '',
         password: ''
     });
+    
+    axios.defaults.withCredentials = true;
 
     const [missingEmail, setEmailAsMissing] = useState(false);
     const [missingPassword, setPasswordAsMissing] = useState(false);
     const [invalidCredentials, setCredentialsAsInvalid] = useState(false);
+    const {setRole} = useAuth();
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -46,13 +53,20 @@ function SignIn(){
         await axios.post('http://localhost:3000/api/auth/sign-in', {
             email : loginData.email,
             password : loginData.password
+        }, {
+            withCredentials: true
         }).then((response) => {
-            // save token to http cookie
-            Cookies.set('access_token', response.data.token);
+            // save role
+            setRole(response.data.role);
+
             // redirect to home page
-            window.location.href = "/";
+            if (response.data.role === 'ADMIN'){
+                navigate("/admin", {replace: true})
+            } else{
+                navigate("/", {replace: true})
+            }
+            
         }).catch((err) => {
-            console.log(err);
             switch (err.response.status){
                 case 400:
                     // notify user of invalid credentials

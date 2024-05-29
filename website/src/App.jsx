@@ -1,10 +1,7 @@
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import {
-    BrowserRouter,
-    Routes,
-    Route,
     createBrowserRouter,
     RouterProvider
 } from 'react-router-dom'
@@ -16,46 +13,132 @@ import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
 import UserList from './pages/UserList.jsx'
 import UserDetails from './pages/UserDetails.jsx'
+import AddProduct from './pages/AddProduct.jsx'
+import EditProducts from './pages/EditProduct.jsx'
+import Products from './pages/Products.jsx'
+import ProductDetail from './pages/ProductDetail.jsx'
+import ProductInfo from './pages/ProductInfo.jsx'
+import ShoppingCart from './pages/ShoppingCart.jsx'
+import ProductList from './pages/ProductList.jsx'
+import {ProtectedRoute} from './components/common/ProtectedRoute.jsx'
+import AuthProvider from "./components/common/AuthProvider.jsx";
+import axios from 'axios'
+import Reports from './pages/Reports.jsx'
+import AdminHomePage from './pages/AdminHomepage.jsx'
+import CheckoutView from './pages/CheckoutView.jsx'
+import OrderSuccess from './pages/SuccessView.jsx'
+import OrdersList from './pages/OrdersList.jsx'
+import OrderInfo from './pages/OrderInfo.jsx'
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <CustomerRoot />,
+        children: [
+            {
+                path: '/',
+                element: <Homepage />
+            },
+            {
+                path: 'sign-in',
+                element: <SignIn />
+            },
+            {
+                path: 'sign-up',
+                element: <SignUp />
+            },
+            {
+                path: 'products',
+                element: <Products />
+            },
+            {
+                path: 'products/:code',
+                element: <ProductDetail/>
+            },
+            {
+                path: 'shopping-cart',
+                element: <ShoppingCart/>
+            },
+            {
+                path: 'orders',
+                element: <OrdersList/>
+            },
+            {
+                path: 'orders/:orderId',
+                element: <OrderInfo />
+            },
+            {
+                path: 'checkout-view',
+                element: <CheckoutView/>
+            },
+            {
+                path: 'success',
+                element: <OrderSuccess/>
+            },
+        ]
+    },
+    {
+        path: '/admin',
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: '',
+                element: <AdminRoot />,
+                children: [
+                    {
+                        path: '',
+                        element: <AdminHomePage />
+                    },
+                    {
+                        path: 'products',
+                        element: <ProductList/>
+                    },
+                    {
+                        path: 'products/:code',
+                        element: <ProductInfo/>
+                    }
+                    ,
+                    {
+                        path: 'reports',
+                        element: <Reports />
+                    }
+                    ,
+                    {
+                        path: 'add-product',
+                        element: <AddProduct/>
+                    }
+                    ,
+                    {
+                        path: 'edit-product/:id',
+                        element: <EditProducts/>
+                    },
+                    {
+                      path: 'user-list',
+                      element: <UserList />
+                    },
+                    {
+                      path: 'user/:id',
+                      element: <UserDetails />
+                    }
+                ]
+            },
+
+        ]    // place other admin reltated routes here
+    }
+]);
 
 function App(){
-
-    const router = createBrowserRouter([
-        {
-            path: '/',
-            element: <CustomerRoot />,
-            children: [
-                {
-                    path: '/',
-                    element: <Homepage />
-                },
-                {
-                    path: 'sign-in',
-                    element: <SignIn />
-                },
-                {
-                    path: 'sign-up',
-                    element: <SignUp />
-                },
-                {
-                    path: 'user-list',
-                    element: <UserList />
-                },
-                {
-                    path: 'user/:id',
-                    element: <UserDetails />
-                }
-            ]
-        },
-        {
-            path: '/admin',
-            element: <AdminRoot />,
-            children: []    // place other admin reltated routes here
-        }
-    ]);
+    axios.defaults.withCredentials = true;
+    useEffect(() => {
+        axios.post("http://localhost:3000/api/auth/refresh", {}, {withCredentials:true});
+    }, []);
 
     return (
         <>
-            <RouterProvider router={router} />
+            {/* <RouterProvider router={router} /> */}
+            <AuthProvider>
+                <RouterProvider router={router} />
+            </AuthProvider>
         </>
     )
 }
