@@ -16,7 +16,9 @@ function Products(){
     useEffect(() => {
         const params = new URLSearchParams({
           p: searchParams.get('p') ?? 1,
-          c: searchParams.get('c') ?? 10
+          c: searchParams.get('c') ?? 10,
+          sort: searchParams.get('sort') ?? 'name',
+          filter: searchParams.get('filter') ?? ''
         });
 
         axios.get(`http://localhost:3000/api/product?${params.toString()}`)
@@ -53,6 +55,18 @@ function Products(){
     return (
         <main className="relative w-full h-full overflow-x-hidden">
           <h1 className="w-screen h-auto text-center block py-6 font-bold text-3xl">Available Products</h1>
+          <div className="flex flex-col items-center gap-3 md:flex-row justify-center">
+              <label className="text-bold" htmlFor="sorting"> Sort by:</label>
+              <select id="sorting" value={searchParams.get('sort') || 'name'} onChange={(e) => setSearchParams({ ...Object.fromEntries(searchParams.entries()), sort: e.target.value })} className="font-semibold text-yellow-600">
+                    <option value="name">Alphabetical</option>
+                    <option value="price">Price</option>
+                    <option value="quantity">Quantity</option>
+              </select>
+              <labeL className="text-bold" htmlFor="filtering"> Filter by type:</labeL>
+              <input type="text" id="filtering" placeholder="Enter product type" value={searchParams.get('filter') || ''}
+              onChange={(e) => setSearchParams({ ...Object.fromEntries(searchParams.entries()), filter: e.target.value })}
+              className="font-semibold text-yellow-600"/>
+          </div>
           <div className="w-screen h-auto flex flex-col flex-wrap items-center gap-6 md:flex-row justify-center">
             {products.map((product) => (
               <div key={product._id} className="w-1/2 md:w-1/4 lg:w-1/5 flex flex-col flex-shrink-0 items-center justify-center shadow-md rounded-t-md border-black-50 bg-opacity-60 p-3">
