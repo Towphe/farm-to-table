@@ -32,7 +32,7 @@ function AdminOrderList()
                   <thead className="text-md text-slate-800 uppercase ">
                     <tr>
                       <th>UserName</th>
-                      <th>ID</th>
+                      <th>id</th>
                       <th>Transaction Date</th>
                       <th>Status</th>
                       <th>Total Amount</th>
@@ -44,7 +44,7 @@ function AdminOrderList()
                     {
                       orders.map((order) => (
                         <tr className="border-b dark:border-gray-700" key={order._id}>
-                          <td className="py-6">
+                          <td className="py-6 uppercase">
                               {order.user}
                           </td>
                           <td className="italic font-semibold">:{order.transactionId}</td>
