@@ -26,6 +26,7 @@ import AdminHomePage from './pages/AdminHomepage.jsx'
 import CheckoutView from './pages/CheckoutView.jsx'
 import OrderSuccess from './pages/SuccessView.jsx'
 import OrdersList from './pages/OrdersList.jsx'
+import AdminOrderList from './pages/AdminOrderList.jsx'
 
 
 const router = createBrowserRouter([
@@ -58,7 +59,7 @@ const router = createBrowserRouter([
                 element: <ShoppingCart/>
             },
             {
-                path: 'orders',
+                path: 'test',
                 element: <OrdersList/>
             },
             {
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
                     {
                         path: 'edit-product/:id',
                         element: <EditProducts/>
+                    },
+                    {
+                        path: 'orders',
+                        element: <AdminOrderList/>
                     }
                 ]
             },
