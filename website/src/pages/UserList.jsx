@@ -11,7 +11,7 @@ function UserList() {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const response = await axios.get('http://localhost:5173/api/admin/viewUser');
+            const response = await axios.get('http://localhost:3000/api/admin/viewUser');
             setUsers(response.data);
         };
         fetchUsers();
