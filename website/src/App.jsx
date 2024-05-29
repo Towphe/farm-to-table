@@ -113,11 +113,11 @@ const router = createBrowserRouter([
                         element: <EditProducts/>
                     },
                     {
-                      path: 'user-list',
+                      path: 'users',
                       element: <UserList />
                     },
                     {
-                      path: 'user/:id',
+                      path: 'users/:id',
                       element: <UserDetails />
                     }
                 ]

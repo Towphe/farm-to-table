@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-
-print(process.env.MONGO_KEY)
+import User from "../models/User.js";
 
 await mongoose.connect(process.env.MONGO_KEY, {
     useNewUrlParser: true, useUnifiedTopology: true
@@ -19,16 +18,4 @@ const viewUser = async (req, res) => {
     res.send( await User.find({}));
 }
 
-const updateUser = async (req, res) => {
-    if (req.user.userType !== 'ADMIN'){
-        res.statusCode = 403;
-        return res.send({detail: 'Unauthorized access'});
-    }
-
-    const userId = req.user.userId;
-    const update = req.body;
-    
-    res.send( await User.findByIdAndUpdate(userId, update));
-}
-
-export {index, viewUser, updateUser}
+export {index, viewUser}
