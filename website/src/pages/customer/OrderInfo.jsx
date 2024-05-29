@@ -87,6 +87,12 @@ function OrderInfo(){
                             <td>₱ {orderItem.price}</td>
                         </tr>
                     )}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Total</td>
+                        <td className="font-bold">₱ {orderDetails.totalPrice}</td>
+                    </tr>
                 </tbody>
                 </table>
             </div>

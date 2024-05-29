@@ -39,15 +39,15 @@ function ProductDetail() {
         <div className='md:ml-10 flex place-self-start'>
             <Link to="/products" className='m-5 shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2 absolute top-20'>Go Back</Link>
         </div>
-        <div className="p-4 rounded-lg flex flex-col flex-shrink-0 shadow-md rounded-t-md space-y-3 m-5 ">
-          <img src={product.image_url} />
+        <div className="w-full sm:w-4/5 md:w-2/3 lg:w-1/2  p-4 rounded-lg flex flex-col items-center flex-shrink-0 shadow-md rounded-t-md space-y-3 m-5 ">
+          <img className='w-full sm:w-2/5 md:w-1/3 lg:w-1/4' src={product.image_url} />
           <div className="flex justify-between w-full p-1 g-3 space-x-10 font-bold text-2xl">       
             <span>{product.name}</span>
             <span>₱{product.price["$numberDecimal"]}</span>
           </div>
           <p>{product.description}</p>
           {product.quantity === 0 ? <p className='text-red-500'>Out of stock</p> : <></>}
-          <button onClick={addToCart} key={product._id} className='shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2'>Add to Cart</button>
+          {product.quantity > 0 ? <button onClick={addToCart} key={product._id} className='w-full sm:w-2/5 md:w-1/3 lg:w-1/4 shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2'>Add to Cart</button> : <></>}
         </div>
     </main>
   );
