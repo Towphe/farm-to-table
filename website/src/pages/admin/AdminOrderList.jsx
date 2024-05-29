@@ -91,7 +91,7 @@ function AdminOrderList()
                                 {order._id}
                               </Link>
                           </td>
-                          <td>{order.userId.toString()}</td>
+                          <td>{order.userId}</td>
                           <td>{order.createdAt}</td>
                           {/* set pending if status is 0  and red color*/}
                           {/* if 1, set as completed and green color */} 
@@ -116,7 +116,7 @@ function AdminOrderList()
                   </tbody>
                 </table>
             </div>
-            <ul className="absolute flex justify-center w-screen text-center bottom-16 text-x3">
+            <ul className="flex gap-6 justify-center w-screen text-center bottom-16 text-x3 py-6">
             {Array.from({length: pageCount}, (v, k) => k+1).map((n) => (<li key={n}>
               <Link to={`/admin/orders?p=${n}&c=${10}`}>{n}</Link>
               </li>))}
