@@ -18,6 +18,12 @@ const isUndefined = (element) =>
 }
 
 const confirmOrder = async (req, res) => {
+
+    if (req.user.userType !== 'ADMIN'){
+        res.statusCode = 403;
+        res.json({detail: "Not authorized to confirm order."})
+        return;
+    }
     const orderId = req.params.orderId;
     
     const order = await OrderTransaction.findOneAndUpdate(
