@@ -8,6 +8,7 @@ import testRouter from './routes/testRouter.js';
 import fileUpload from 'express-fileupload';
 import cookieParser from'cookie-parser';
 import orderRouter from './routes/orderRouter.js';
+import userRouter from './routes/userRouter.js';
 const app = express();
 const port = process.env.PORT;  // place this on secrets later
 
@@ -25,6 +26,7 @@ productRouter(app);
 testRouter(app);
 reportRouter(app);
 orderRouter(app);
+userRouter(app);
 
 app.get("/", (req, res) => {
     res.send("Hello, world!");

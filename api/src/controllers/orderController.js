@@ -55,7 +55,7 @@ const confirmOrder = async (req, res) => {
     
     await OrderTransaction.FindOneAndUpdate({_id: orderId}, {$set: {orderStatus: 1}} );
 //    res.send({ message: "Order confirmed successfully." });
-//};
+};
 
 const retrieveOrder = async (req, res) => {
     const orderId = req.params.orderId;
@@ -166,7 +166,7 @@ const createOrder = async (req, res) =>
 //        createdAt: order.createdAt,
 //        orderId: order._id
 //    });
-};
+// };
 
 const cancelOrder = async (req, res) => 
 {
@@ -198,4 +198,4 @@ const updateOrder = async (req, res) =>
         return res.json({ detail: `Transaction Modified.`});
     }
 
-export{ findOrder, listOrders, createOrder, confirmOrder, cancelOrder, updateOrder};
+export{ retrieveOrder, listOrders, createOrder, confirmOrder, cancelOrder, updateOrder};

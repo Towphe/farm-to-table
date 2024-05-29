@@ -1,4 +1,4 @@
-import { cancelOrder, updateOrder, retrieveOrder, listOrders, createOrder, confirmOrder, updateOrder } from "../controllers/orderController.js";
+import { cancelOrder, updateOrder, retrieveOrder, listOrders, createOrder, confirmOrder } from "../controllers/orderController.js";
 import { authenticateJWT } from "../middleware/authMiddleware.js";
 
 const baseUrl = "/api/orders";
