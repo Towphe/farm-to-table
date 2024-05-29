@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const OrderTransaction = mongoose.model('Order', {
-    email: String,
+    userId: mongoose.Types.ObjectId,
     status: Number,
     totalPrice: Number,
     createdAt: Date,

@@ -61,7 +61,6 @@ function Reports() {
                 <span>as of {DateTime.now().toFormat('MMMM d, y')}</span>
             </div>
             <div className="flex gap-4">
-                <div className="">Time Range</div>
                 <button className={timeRange == 'week' ? timeRangeButtonStyles.clicked : timeRangeButtonStyles.unclicked} onClick={setTimeRangetoWeek}>Week</button>
                 <button className={timeRange == 'month' ? timeRangeButtonStyles.clicked : timeRangeButtonStyles.unclicked} onClick={setTimeRangetoMonth}>Month</button>
                 <button className={timeRange == 'year' ? timeRangeButtonStyles.clicked : timeRangeButtonStyles.unclicked} onClick={setTimeRangetoYear}>Year</button>

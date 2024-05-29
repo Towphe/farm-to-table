@@ -58,8 +58,20 @@ const retrieveBasicReport = async (req, res) => {
                 from: "orderitems",
                 localField: "_id",
                 foreignField: "transactionId",
-                as: "items",
+                as: "items",    // get sum of quantities somehow
                 pipeline: [
+                    {
+                        $group: {
+                            _id: "$_id",
+                            transactionId: {$first: "$transactionId"},
+                            quantity: {
+                                $sum: "$quantity"
+                            },
+                            productId: {$first: "$productId"},
+                            quantity: {$first: "$quantity"},
+                            price: {$first: "$price"},
+                        }
+                    },
                     {
                         $lookup : {
                             from: "products",
@@ -69,22 +81,22 @@ const retrieveBasicReport = async (req, res) => {
                         }
                     }
                 ]
-            }
+            }  // also group by id and get sum
         }
     ]);
-    
+
     orders.map((order) => {
-        // try to not add to tally if order was cancelled
+        // try to not add to tally if order was cancelledHAH
         order.items.map((product) => {
             if (productTally[product.detail[0]._id] === undefined){
                 // product not yet in tally
                 productTally[product.detail[0]._id] = {
                     name: product.detail[0].name,
-                    count: 1
+                    count: product.quantity
                 };
             } else{
                 // product already in tally
-                productTally[product.detail[0]._id].count += 1;
+                productTally[product.detail[0]._id].count += product.quantity;
             }
         });
 

@@ -11,6 +11,8 @@ import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/Signup.jsx'
 import CustomerRoot from './pages/CustomerRoot.jsx'
 import AdminRoot from './pages/AdminRoot.jsx'
+import UserList from './pages/UserList.jsx'
+import UserDetails from './pages/UserDetails.jsx'
 import AddProduct from './pages/AddProduct.jsx'
 import EditProducts from './pages/EditProduct.jsx'
 import Products from './pages/Products.jsx'
@@ -27,7 +29,7 @@ import CheckoutView from './pages/CheckoutView.jsx'
 import OrderSuccess from './pages/SuccessView.jsx'
 import OrdersList from './pages/OrdersList.jsx'
 import AdminOrderList from './pages/AdminOrderList.jsx'
-
+import OrderInfo from './pages/OrderInfo.jsx'
 
 const router = createBrowserRouter([
     {
@@ -61,6 +63,10 @@ const router = createBrowserRouter([
             {
                 path: 'test',
                 element: <OrdersList/>
+            },
+            {
+                path: 'orders/:orderId',
+                element: <OrderInfo />
             },
             {
                 path: 'checkout-view',
@@ -110,6 +116,14 @@ const router = createBrowserRouter([
                     {
                         path: 'orders',
                         element: <AdminOrderList/>
+                    },
+                    {
+                      path: 'users',
+                      element: <UserList />
+                    },
+                    {
+                      path: 'users/:id',
+                      element: <UserDetails />
                     }
                 ]
             },
