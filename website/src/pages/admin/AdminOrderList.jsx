@@ -4,20 +4,24 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import {Link, useSearchParams, useNavigate} from 'react-router-dom';
 import LoadingScreen from "../../components/common/LoadingScreen";
+import { useAuth } from "../../components/common/AuthProvider.jsx";
 
 function AdminOrderList()
 {
+  const {role} = useAuth();
   const [isLoading, setAsLoading] = useState(true);
   const [pageCount, setPageCount] = useState(0);
   const [orders, setOrders] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [filter, setFilter] = useState(searchParams.get('filter') || '');
   const navigate = useNavigate();
 
 
   const fetchOrders = () => {
     const params = new URLSearchParams({
         p: searchParams.get('p') ?? 1,
-        c: searchParams.get('c') ?? 10
+        c: searchParams.get('c') ?? 10,
+        filter
     });
 
     axios.get(`http://localhost:3000/api/admin/orders?${params.toString()}`)
@@ -31,7 +35,12 @@ function AdminOrderList()
   useEffect(() => {
     fetchOrders();
     setAsLoading(false);
-  }, [searchParams])
+  }, [searchParams, filter])
+
+  const handleStatusFilterChange = (e) => {
+    setFilter(e.target.value);
+    setSearchParams({ ...Object.fromEntries(searchParams), sort: e.target.value });
+  };
 
   const approveOrder = (orderId) => {
     axios.patch(`http://localhost:3000/api/admin/orders/${orderId}/confirm`)
@@ -69,6 +78,15 @@ function AdminOrderList()
   return (
       <main className="relative w-full h-full overflow-x-hidden gap-6 pt-10">
           <h1 className="w-screen h-auto text-center block m-4 font-bold text-2xl">Order List</h1>
+          <div className="flex flex-shrink-0 flex-row gap-3 md:flex-row justify-center px-20 pt-4">
+              <label htmlFor="status">Status</label>
+              <select className="font-semibold text-yellow-600" name="status" id="sorting" value={filter} onChange={handleStatusFilterChange}>
+                  <option value="all">All</option>
+                  <option value="pending">Pending</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
             <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-3 md:flex-col justify-center mt-16">
                 <table className="w-3/4 text-md text-left rtl:text-right text-slate-800">
                   <thead className="text-md text-slate-800 uppercase ">

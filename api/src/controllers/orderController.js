@@ -17,34 +17,6 @@ const isUndefined = (element) =>
     return false;
 }
 
-/* 
-Find order:
-* check matching transactionId and productId...
-* If match pareho, then I can return transactionId and productId
-* else, result to error: order not found
-* In every product, same lang ang transactionId.
-* Si productId naman different and sorted dapat
-
-Create list of orders:
-* for loop in a way
-* sort according to productId
-
-Create order
-* import body ng OrderTransaction then post sa website yung request
-*/
-
-// const findOrder = async (req, res) =>
-// {
-//     // find matching orders. Use productId to double check
-//     const ord = await OrderItem.findById(req.params.transactionId);
-//     const prod = await OrderItem.findById(req.params.productId);
-    
-//     if (!(ord && prod))
-//         return res.status(404).json({ message: 'Order not found.' });
-
-//     res.send(ord, prod);
-// };
-
 const confirmOrder = async (req, res) => {
     const orderId = req.params.orderId;
     
@@ -59,21 +31,6 @@ const confirmOrder = async (req, res) => {
 
     res.send({ message: "Order confirmed successfully." });
 };
-
-// const rejectOrder = async (req, res) => {
-//     const orderId = req.params.orderId;
-    
-//     const order = await OrderTransaction.findOneAndUpdate(
-//         {
-//             _id: orderId},
-//         {
-//             $set: {
-//                 status: 2
-//             }
-//         });
-
-//     res.send({ message: "Order rejected successfully." });
-// };
 
 const retrieveOrder = async (req, res) => {
     const orderId = req.params.orderId;
@@ -117,15 +74,41 @@ const retrieveOrder = async (req, res) => {
     return 
 }
 
-const listOrders = async (req, res) =>
+const getStatusInt = (statusStr) => {
+    switch(statusStr){
+        case 'pending':
+            return 0;
+        case 'completed':
+            return 1;
+        case 'cancelled':
+            return 2;
+    }
+}
+
+const listOrdersOfUser = async (req, res) =>
 {
-    // include products later
-    const orders = await OrderTransaction.find({
-        userId: req.user.userId
-    });
+    const p = isUndefined(req.query.p) ? 1 : parseInt(req.query.p);
+    const c = isUndefined(req.query.c) ? 10 : parseInt(req.query.c);
+    
+    const filter = (req.query.filter == "" || req.query.filter.toLowerCase() == "all") ? "all" : req.query.filter;
+    
+    let orderCount;
+    let orders;
+    console.log(filter);
+    if (filter == "all"){
+        
+        orderCount = await OrderTransaction.countDocuments({userId: req.user.userId});
+        orders = await OrderTransaction.find({userId: req.user.userId}).sort({createdAt: -1}).skip((p - 1) * c).limit(c);
+    } else{
+        // apply filter
+        orderCount = await OrderTransaction.countDocuments({userId: req.user.userId, status: getStatusInt(filter)});
+        orders = await OrderTransaction.find({userId: req.user.userId, status: getStatusInt(filter)}).sort({createdAt: -1}).skip((p - 1) * c).limit(c);
+    }
+
+    const pageCount = Math.ceil(orderCount / c);
 
     // send number of orders per page and page number
-    res.send(orders);
+    res.json({ orders, pages: pageCount });
 };
 
 const listAllOrders = async (req, res) => {
@@ -135,18 +118,25 @@ const listAllOrders = async (req, res) => {
 
     const p = isUndefined(req.query.p) ? 1 : parseInt(req.query.p);
     const c = isUndefined(req.query.c) ? 10 : parseInt(req.query.c);
-    const status = req.query.sort || 'all'; // filter by status later
+    const filter = (req.query.filter == "" || req.query.filter.toLowerCase() == "all") ? "all" : req.query.filter;
 
-    try {
-        const orderTransaction = await OrderTransaction.countDocuments({});
-        const pageCount = Math.ceil(orderTransaction / c);
-
-        const orders = await OrderTransaction.find({}).skip((p - 1) * c).limit(c);
+    let orderCount;
+    let orders;
+    console.log(filter);
+    if (filter == "all"){
         
-        res.json({ orders, pages: pageCount });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        orderCount = await OrderTransaction.countDocuments({userId: req.user.userId});
+        orders = await OrderTransaction.find({}).sort({createdAt: -1}).skip((p - 1) * c).limit(c);
+    } else{
+        // apply filter
+        orderCount = await OrderTransaction.countDocuments({userId: req.user.userId, status: getStatusInt(filter)});
+        orders = await OrderTransaction.find({status: getStatusInt(filter)}).sort({createdAt: -1}).skip((p - 1) * c).limit(c);
     }
+
+    const pageCount = Math.ceil(orderCount / c);
+
+    // send number of orders per page and page number
+    res.json({ orders, pages: pageCount });
 }
 
 const createOrder = async (req, res) =>
@@ -224,4 +214,4 @@ const updateOrder = async (req, res) =>
         return res.json({ detail: `Transaction Modified.`});
     }
 
-export{ retrieveOrder, cancelOrder, listAllOrders, listOrders, createOrder, confirmOrder, updateOrder};
+export{ retrieveOrder, cancelOrder, listAllOrders, listOrdersOfUser, createOrder, confirmOrder, updateOrder};

@@ -9,7 +9,7 @@ const index = (req, res) => {
     res.send("Welcome to index");
 };
 
-const viewUser = async (req, res) => {
+const retrieveUsers = async (req, res) => {
     if (req.user.userType !== 'ADMIN'){
         res.statusCode = 403;
         return res.send({detail: 'Unauthorized access'});
@@ -18,4 +18,4 @@ const viewUser = async (req, res) => {
     res.send( await User.find({}));
 }
 
-export {index, viewUser}
+export {index, retrieveUsers}
