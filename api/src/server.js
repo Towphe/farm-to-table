@@ -7,6 +7,7 @@ import cors from 'cors';
 import testRouter from './routes/testRouter.js';
 import fileUpload from 'express-fileupload';
 import cookieParser from'cookie-parser';
+import orderRouter from './routes/orderRouter.js';
 const app = express();
 const port = process.env.PORT;  // place this on secrets later
 
@@ -23,6 +24,7 @@ authRouter(app);
 productRouter(app);
 testRouter(app);
 reportRouter(app);
+orderRouter(app);
 
 app.get("/", (req, res) => {
     res.send("Hello, world!");

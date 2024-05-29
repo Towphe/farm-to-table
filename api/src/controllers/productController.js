@@ -2,6 +2,7 @@ import mongoose, { mongo } from "mongoose";
 import Product from "../models/Product.js";
 import ImageHandler from '../util/imageHandler.js';
 import {Decimal128} from 'decimal128';
+import ShoppingCart from "../models/ShoppingCart.js";
 
 await mongoose.connect(process.env.MONGO_KEY, {
     useNewUrlParser: true, useUnifiedTopology: true
@@ -16,21 +17,6 @@ const isUndefined = (T) => {
     return false;
 }
 
-const ShoppingCart = mongoose.model('ShoppingCart', {
-    userId: mongoose.Types.ObjectId,
-    productName: String,
-    productId: mongoose.Types.ObjectId,
-    price: {
-        default: 0,
-        required: true,
-        type: mongoose.Types.Decimal128,
-    },
-    quantity: {
-        default: 0,
-        required: true,
-        type: Number,
-    }
-});
 
 const retrieveProduct = async (req, res) => {
     const product = await Product.findById(req.params.productId);
@@ -88,11 +74,6 @@ const addProductImage = async (req, res) => {
                         product.save();
                         // console.log(product);
                     });
-    console.log(product);
-    // if (!product){
-    //     res.statusCode = 404;
-    //     return res.json({detail: 'Product non-existent'});
-    // }
 
     return res.json({detail: 'Added product image'});
 }
