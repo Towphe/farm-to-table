@@ -146,7 +146,6 @@ const createOrder = async (req, res) =>
     // const user = await User.find({_id: req.user.userId});
     const shoppingCart = await ShoppingCart.find({userId: req.user.userId});
     let orderTransaction;
-    console.log(req.user.userId);
     //create initial order
     await OrderTransaction.create(
     {
@@ -168,6 +167,9 @@ const createOrder = async (req, res) =>
             price: item.price
         });
         await ShoppingCart.findByIdAndDelete(item._id);
+        await ShoppingCart.deleteMany({productId: item.productId}); // delete shopping cart instances having the same product
+
+        // remove every product from all shopping carts
         const product = await Product.findById(item.productId);
         product.quantity -= item.quantity;
         product.save();
@@ -179,8 +181,7 @@ const createOrder = async (req, res) =>
 const cancelOrder = async (req, res) => 
 {   
     const order = await OrderTransaction.findOne({_id: req.params.orderId});
-    
-    if (req.userType != 'ADMIN' && req.user.userId != order.userId.toString()){
+    if (req.user.userType != 'ADMIN' && req.user.userId != order.userId.toString()){
         console.log("Not authorized")
         res.statusCode = 403;
         res.send({detail: 'Not authorized to reject order.'})
