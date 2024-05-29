@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from 'react-router-dom';
-import { useAuth } from "../components/common/AuthProvider.jsx";
+import { useAuth } from "../../components/common/AuthProvider.jsx";
 import { useNavigate } from "react-router-dom";
 
 // https://v1.tailwindcss.com/components/forms
@@ -40,18 +40,6 @@ function CheckoutView()
     }));
   };
 
-  // const handlePaymentChange = (e) =>
-  // {
-  //   const { value } = e.target;
-  //   const parsedVal = parseFloat(value);
-
-  //   if(!isNaN(parsedVal) && (parsedVal >= total))
-  //     setPayment(parsedVal);
-
-  //   else
-  //     setPayment(0);
-  // };
-
   useEffect(() => 
   {
     const isFormValid = Object.values(OrderDetails).every(value => value.trim() !== '');
@@ -60,11 +48,11 @@ function CheckoutView()
 
   useEffect(() => 
   {
-    // if (role === undefined) 
-    // {
-    //     navigate("/", {replace: true});
-    //     return;
-    // }
+    if (role === undefined) 
+    {
+        navigate("/", {replace: true});
+        return;
+    }
      
     axios.get(`http://localhost:3000/api/shopping-cart`)
         .then(response => 
@@ -99,7 +87,7 @@ function CheckoutView()
   // place here yung post request galing sa order
   // if successful, delete lahat ng items sa shopping cart
   return (
-    <main className="flex flex-col min-h-screen bg-gray-100 p-4">
+    <main className="relative w-full h-full overflow-x-hidden gap-6 pt-10 p-4">
       <h1 className="text-2xl font-bold mb-4">Checkout</h1>
       <section className="flex flex-col border border-gray-400 rounded-md p-4 mb-4">
         <h2 className="text-lg mb-2 font-bold">Items</h2>

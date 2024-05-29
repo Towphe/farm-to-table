@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {useAuth} from "../components/common/AuthProvider.jsx";
-import LoadingScreen from "../components/common/LoadingScreen.jsx";
+import {useAuth} from "../../components/common/AuthProvider.jsx";
+import LoadingScreen from "../../components/common/LoadingScreen.jsx";
 import axios from "axios";
 import { DateTime } from "luxon";
 
@@ -45,6 +45,15 @@ function OrderInfo(){
         }
     }
 
+    const rejectOrder = (orderId) => {
+        axios.patch(`http://localhost:3000/api/admin/orders/${orderId}/reject`)
+          .then((res) => {
+            navigate("/orders", {replace: true});
+            setAsPending(false);
+            return;
+          });
+    }
+
     return (
         <main className="w-full h-full px-6 py-4">
             <div className="text-lg">
@@ -82,7 +91,7 @@ function OrderInfo(){
                 </table>
             </div>
             <div className="w-full flex justify-center">
-                {orderDetails.status === 0 ? <button className="block w-full md:w-1/2 lg:w-1/3 bg-red-800 text-off-white font-semibold py-2 rounded-lg mt-6 hover:opacity-80">Cancel Order</button> : <></>}
+                {orderDetails.status === 0 ? <button onClick={() => rejectOrder(orderId)} className="block w-full md:w-1/2 lg:w-1/3 bg-red-800 text-off-white font-semibold py-2 rounded-lg mt-6 hover:opacity-80">Cancel Order</button> : <></>}
             </div>
             
         </main>

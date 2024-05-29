@@ -46,15 +46,33 @@ Create order
 // };
 
 const confirmOrder = async (req, res) => {
-    const orderId = req.params.email;
-    const orderStatus = req.params.status;
-
-    if (orderStatus!== 1) {
-        return res.status(405).send({ error: 'Invalid order status.' });
-    }
+    const orderId = req.params.orderId;
     
-    await OrderTransaction.FindOneAndUpdate({_id: orderId}, {$set: {orderStatus: 1}} );
-//    res.send({ message: "Order confirmed successfully." });
+    const order = await OrderTransaction.findOneAndUpdate(
+        {
+            _id: orderId},
+        {
+            $set: {
+                status: 1
+            }
+        });
+
+    res.send({ message: "Order confirmed successfully." });
+};
+
+const rejectOrder = async (req, res) => {
+    const orderId = req.params.orderId;
+    
+    const order = await OrderTransaction.findOneAndUpdate(
+        {
+            _id: orderId},
+        {
+            $set: {
+                status: 2
+            }
+        });
+
+    res.send({ message: "Order rejected successfully." });
 };
 
 const retrieveOrder = async (req, res) => {
@@ -100,29 +118,49 @@ const retrieveOrder = async (req, res) => {
 }
 
 const listOrders = async (req, res) =>
-{   
-    const userId = req.user.userId;
-    console.log(req.user.userId);
-
+{
     // include products later
-    const orders = await OrderTransaction.find({userId: userId})
+    const orders = await OrderTransaction.find({
+        userId: req.user.userId
+    });
 
     // send number of orders per page and page number
     res.send(orders);
 };
 
+const listAllOrders = async (req, res) => {
+    // const orders = await OrderTransaction.find({});
+
+    // res.send(orders);
+
+    const p = isUndefined(req.query.p) ? 1 : parseInt(req.query.p);
+    const c = isUndefined(req.query.c) ? 10 : parseInt(req.query.c);
+    const status = req.query.sort || 'all'; // filter by status later
+
+    try {
+        const orderTransaction = await OrderTransaction.countDocuments({});
+        const pageCount = Math.ceil(orderTransaction / c);
+
+        const orders = await OrderTransaction.find({}).skip((p - 1) * c).limit(c);
+        
+        res.json({ orders, pages: pageCount });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+}
+
 const createOrder = async (req, res) =>
 {
     // create order transaction
     // include email, status, totalprice, date, street, brgy, city, and province details from ordertransaction model
-    const user = await User.find({_id: req.user.userId});
-    const shoppingCart = await ShoppingCart.find({userId: user._id});
+    // const user = await User.find({_id: req.user.userId});
+    const shoppingCart = await ShoppingCart.find({userId: req.user.userId});
     let orderTransaction;
-
+    console.log(req.user.userId);
     //create initial order
     await OrderTransaction.create(
     {
-        email: user._id,
+        userId: req.user.userId,
         status: 0,
         totalPrice: req.body.totalPrice,
         createdAt: DateTime.now().toJSDate(),
@@ -145,41 +183,18 @@ const createOrder = async (req, res) =>
     return res.json({ transactionId: orderTransaction._id });
 };
 
-//const confirmOrder = async (req, res) => 
-//{
-//    const orderId = req.params.transactionId;
-//    const orderStatus = req.params.status;
-//
-//    if (orderStatus !== 1) return res.status(405).send({ error: 'Invalid order status.' });
-//    
-//    const order = await OrderTransaction.findOneAndUpdate(
-//        { _id: orderId }, 
-//        { $set: {orderStatus: 1} },
-//        { new: true }
-//    );
-//
-//    if (!order) return res.status(404).send({ error: 'Order not found.' });
-//
-//    res.send(
-//    {
-//        message: "Order confirmed successfully.",
-//        createdAt: order.createdAt,
-//        orderId: order._id
-//    });
-// };
-
 const cancelOrder = async (req, res) => 
-{
-    const ordStat = await OrderTransaction.findOneAndUpdate(
-        {
-            _id: req.params.orderId
-        },
-        {
-            $set : {
-                status : 2
-            }
-        }
-    )
+{   
+    const order = await OrderTransaction.findOne({_id: req.params.orderId});
+
+    if (req.userType != 'ADMIN' && req.userId != order.userId.toString()){
+        res.statusCode = 403;
+        res.send({detail: 'Not authorized to reject order.'})
+        return
+    }
+    order.status = 2;
+    order.save();
+
     return res.json({ detail: `Transaction Cancelled.`});
 }
 
@@ -198,4 +213,4 @@ const updateOrder = async (req, res) =>
         return res.json({ detail: `Transaction Modified.`});
     }
 
-export{ retrieveOrder, listOrders, createOrder, confirmOrder, cancelOrder, updateOrder};
+export{ retrieveOrder, rejectOrder, listAllOrders, listOrders, createOrder, confirmOrder, cancelOrder, updateOrder};

@@ -34,12 +34,18 @@ const signup = async (req, res) => {
     user.email = req.body.email;
     user.password = await bcrypt.hash(req.body.password, saltRounds);
 
+    let accessToken;
+    let refreshToken;
     // save user to db
-    await user.save();
+    await user.save()
+        .then(res => {
+            let accessToken = jwt.sign({userId: user._id.toString(), userType: user.userType}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
+            let refreshToken = jwt.sign({userId: user._id.toString(), userType: user.userType}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '1d'});        
+        });
 
     // generate access token & refresh token
-    const accessToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
-    const refreshToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '1d'});
+    // let accessToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
+    // let refreshToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '1d'});
     
     res.cookie('accessToken', accessToken, {
         httpOnly: true,
@@ -81,8 +87,8 @@ const signin = async (req, res) => {
     }
     
     // generate access token & refresh token
-    const accessToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
-    const refreshToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '1d'});
+    const accessToken = jwt.sign({userType: user.userType, userId: user._id.toString()}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
+    const refreshToken = jwt.sign({userType: user.userType, userId: user._id.toString()}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '1d'});
     
     res.cookie('accessToken', accessToken, {
         httpOnly: true,
@@ -117,7 +123,7 @@ const refreshToken = async (req, res) => {
             return res.json({detail: "Unauthorized"});
         }
         // re-generate new access token
-        const accessToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1d'});
+        const accessToken = jwt.sign({userId: user.userId, userType: user.userType}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1d'});
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             sameSite: 'None',

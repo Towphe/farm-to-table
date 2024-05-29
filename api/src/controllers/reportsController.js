@@ -87,18 +87,20 @@ const retrieveBasicReport = async (req, res) => {
 
     orders.map((order) => {
         // try to not add to tally if order was cancelledHAH
-        order.items.map((product) => {
-            if (productTally[product.detail[0]._id] === undefined){
-                // product not yet in tally
-                productTally[product.detail[0]._id] = {
-                    name: product.detail[0].name,
-                    count: product.quantity
-                };
-            } else{
-                // product already in tally
-                productTally[product.detail[0]._id].count += product.quantity;
-            }
-        });
+        if (order.status != 2){
+            order.items.map((product) => {
+                if (productTally[product.detail[0]._id] === undefined){
+                    // product not yet in tally
+                    productTally[product.detail[0]._id] = {
+                        name: product.detail[0].name,
+                        count: product.quantity
+                    };
+                } else{
+                    // product already in tally
+                    productTally[product.detail[0]._id].count += product.quantity;
+                }
+            });
+        }
 
         // get order count
         if (order.status === 0){ // pending
@@ -110,7 +112,7 @@ const retrieveBasicReport = async (req, res) => {
         }
         else if (order.status === 2){   // cancelled
             cancelledOrders += 1;
-            totalIncome -= order.totalPrice;
+            //totalIncome -= order.totalPrice; this leads to negative totals
         }
     });
 
@@ -152,6 +154,14 @@ const retrieveHomepageReport = async (req, res) => {
                 pipeline: [
                     {
                         $unwind: {path: "$orderitems", preserveNullAndEmptyArrays: true}
+                    },
+                    {
+                        $lookup : {
+                            from: "products",
+                            localField: "productId",
+                            foreignField: "_id",
+                            as: "detail"
+                        }
                     },
                     {
                         $lookup : {

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import {DateTime} from "luxon";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import LoadingScreen from "../components/common/LoadingScreen";
+import LoadingScreen from "../../components/common/LoadingScreen";
 
 function AdminHomePage(){
     const navigate = useNavigate();

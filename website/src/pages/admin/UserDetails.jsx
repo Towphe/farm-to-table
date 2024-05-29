@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import Footer from '../components/common/Footer';
-import AdminNavBar from '../components/common/AdminNavbar';
+import Footer from '../../components/common/Footer';
+import AdminNavBar from '../../components/common/AdminNavbar';
 
 function UserDetails() {
     const { id } = useParams();

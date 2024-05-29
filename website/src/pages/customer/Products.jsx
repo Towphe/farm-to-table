@@ -1,55 +1,56 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {Link, useNavigate} from 'react-router-dom';
-import LoadingScreen from "../components/common/LoadingScreen";
-import { useAuth } from "../components/common/AuthProvider";
+import {Link, useNavigate, useSearchParams} from 'react-router-dom';
+import LoadingScreen from "../../components/common/LoadingScreen.jsx";
+import { useAuth } from "../../components/common/AuthProvider.jsx";
 
 function Products(){
 
     const [products, setProducts] = useState([]);
-    const [pageCount, setPageCount] = useState();
+    const [pageCount, setPageCount] = useState(0);
+    const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(true);
     const {role} = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/product')
+        const params = new URLSearchParams({
+          p: searchParams.get('p') ?? 1,
+          c: searchParams.get('c') ?? 10
+        });
+
+        axios.get(`http://localhost:3000/api/product?${params.toString()}`)
           .then(response => {
             setProducts(response.data.products);
             setPageCount(response.data.pages)
             setIsLoading(false);
           })
           .catch(error => console.error('Error fetching products:', error));
-      }, []);
-
-      const goToCart = () => {
-        history.push('/Shopping-Cart');
-      };
-
-      const addToCart = async (e) => {
-
-        // if user is unauthenticated, renavigate to signin
-        if (role === undefined){
-          navigate("/sign-in", {replace: true});
-          return;
-        }
-        
-        const productId = e.target.getAttribute('data-product-id').split("-")[1];
-        const product = products.filter((p) => p._id == productId)[0];
-        console.log(product.price);
-        await axios.post(`http://localhost:3000/api/shopping-cart`, {
-          productName: product.name,
-          productId: product._id,
-          price: parseFloat(product.price['$numberDecimal']),
-          quantity: product.quantity
-        }, {withCredentials: true});
-      };
-
-      if (isLoading){
-        return <LoadingScreen />
+      }, [searchParams]);
+      
+    const addToCart = async (e) => {
+      // if user is unauthenticated, renavigate to signin
+      if (role === undefined){
+        navigate("/sign-in", {replace: true});
+        return;
       }
+        
+      const productId = e.target.getAttribute('data-product-id').split("-")[1];
+      const product = products.filter((p) => p._id == productId)[0];
+      console.log(product.price);
+      await axios.post(`http://localhost:3000/api/shopping-cart`, {
+        productName: product.name,
+        productId: product._id,
+        price: parseFloat(product.price['$numberDecimal']),
+        quantity: product.quantity
+      }, {withCredentials: true});
+    };
 
-      return (
+    if (isLoading){
+      return (<LoadingScreen />)
+    }
+
+    return (
         <main className="relative w-full h-full overflow-x-hidden">
           <h1 className="w-screen h-auto text-center block py-6 font-bold text-3xl">Available Products</h1>
           <div className="w-screen h-auto flex flex-col flex-wrap items-center gap-6 md:flex-row justify-center">
@@ -66,7 +67,7 @@ function Products(){
               </div> 
             ))}
           </div>
-          <ul className="w-screen text-center text-xl py-6 md:absolute md:bottom-0">
+          <ul className="flex justify-center gap-4 w-screen text-center text-xl py-6 md:bottom-0">
             {Array.from({length: pageCount}, (v, k) => k+1).map((n) => <li key={n}><Link to={`/products?p=${n}&c=${10}`}>{n}</Link></li>)}
           </ul>
         </main>
