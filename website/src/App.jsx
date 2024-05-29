@@ -30,6 +30,7 @@ import OrderSuccess from './pages/SuccessView.jsx'
 import OrdersList from './pages/OrdersList.jsx'
 import AdminOrderList from './pages/AdminOrderList.jsx'
 import OrderInfo from './pages/OrderInfo.jsx'
+import AdminOrderInfo from './pages/AdminOrderInfo.jsx'
 
 const router = createBrowserRouter([
     {
@@ -116,6 +117,10 @@ const router = createBrowserRouter([
                     {
                         path: 'orders',
                         element: <AdminOrderList/>
+                    },
+                    {
+                        path: 'orders/:orderId',
+                        element: <AdminOrderInfo />
                     },
                     {
                       path: 'users',

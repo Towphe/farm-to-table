@@ -110,7 +110,6 @@ const retrieveCart = async (req, res) => {
     const cartItems = await ShoppingCart.find({
         userId: req.user.userId
     });
-    console.log(cartItems);
 
     return res.send(cartItems);
 };

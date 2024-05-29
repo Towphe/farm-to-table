@@ -24,6 +24,7 @@ function ProductList(){
         .then(response => {
           setProducts(response.data.products);
           setPageCount(response.data.pages);
+
         })
         .catch(error => console.error('Error fetching products:', error));
   };
@@ -124,8 +125,8 @@ function ProductList(){
                   </Link>
                 </button>
             </div>
-            <ul className="absolute w-screen text-center bottom-16 text-x3">
-            {Array.from({length: pageCount}, (v, k) => k+1).map((n) => (<li key={n}>
+            <ul className="w-screen flex justify-center gap-4 text-center bottom-16 text-x3 py-8">
+              {Array.from({length: pageCount}, (v, k) => k+1).map((n) => (<li key={n}>
               <Link to={`/admin/products?p=${n}&c=${10}&sort=${sort}&filter=${filter}`}>{n}</Link>
               </li>))}
             </ul>

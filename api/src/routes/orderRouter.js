@@ -6,7 +6,7 @@ const adminUrl = "/api/admin";
 
 const orderRouter = (app) =>
 {
-    app.get(`${baseUrl}/:orderId`, retrieveOrder);
+    app.get(`${baseUrl}/:orderId`, authenticateJWT, retrieveOrder);
     app.get(`${baseUrl}`, authenticateJWT, listOrders);
     app.get(`${adminUrl}/orders`, authenticateJWT, listAllOrders);
     app.patch(`${adminUrl}/orders/:orderId/confirm`, authenticateJWT, confirmOrder);
