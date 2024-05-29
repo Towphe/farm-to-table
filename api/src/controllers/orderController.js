@@ -147,10 +147,9 @@ const listAllOrders = async (req, res) => {
 const createOrder = async (req, res) =>
 {
     // create order transaction
-    // include email, status, totalprice, date, street, brgy, city, and province details from ordertransaction model
-    // const user = await User.find({_id: req.user.userId});
     const shoppingCart = await ShoppingCart.find({userId: req.user.userId});
     let orderTransaction;
+
     //create initial order
     await OrderTransaction.create(
     {
@@ -172,12 +171,19 @@ const createOrder = async (req, res) =>
             price: item.price
         });
         await ShoppingCart.findByIdAndDelete(item._id);
-        await ShoppingCart.deleteMany({productId: item.productId}); // delete shopping cart instances having the same product
 
         // remove every product from all shopping carts
         const product = await Product.findById(item.productId);
         product.quantity -= item.quantity;
         product.save();
+
+        if (product.quantity === 0){
+            await ShoppingCart.deleteMany(
+                {
+                    productId: {$eq: item.productId}
+                }
+            ); // delete shopping cart instances having the same product
+        }
     });
 
     return res.json({ transactionId: orderTransaction._id });
