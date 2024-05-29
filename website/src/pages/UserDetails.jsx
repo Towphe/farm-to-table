@@ -23,7 +23,7 @@ function UserDetails() {
                 <div className="bg-gray-100 p-4 rounded-lg">
                     <Link to="/" className="text-blue-500">Go back</Link>
                     <h2 className="text-xl font-bold mb-4">User Details</h2>
-                    <div className="p-4 rounded-lg border border-gray-300">
+                    <div className="p-4 rounded-lg border border-gray-500">
                         <p><strong>Email:</strong> {user.email}</p>
                         <p><strong>First Name:</strong> {user.firstname}</p>
                         <p><strong>Middle Name:</strong> {user.middlename}</p>
