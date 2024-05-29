@@ -95,7 +95,6 @@ const listOrdersOfUser = async (req, res) =>
 {
     const p = isUndefined(req.query.p) ? 1 : parseInt(req.query.p);
     const c = isUndefined(req.query.c) ? 10 : parseInt(req.query.c);
-    
     const filter = (req.query.filter == "" || req.query.filter.toLowerCase() == "all") ? "all" : req.query.filter;
     
     let orderCount;

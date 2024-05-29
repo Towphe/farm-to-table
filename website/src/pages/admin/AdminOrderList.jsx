@@ -8,7 +8,6 @@ import { useAuth } from "../../components/common/AuthProvider.jsx";
 
 function AdminOrderList()
 {
-  const {role} = useAuth();
   const [isLoading, setAsLoading] = useState(true);
   const [pageCount, setPageCount] = useState(0);
   const [orders, setOrders] = useState([]);
