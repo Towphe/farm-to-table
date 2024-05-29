@@ -63,7 +63,8 @@ function Products(){
                   </span>
                   <span>₱ {product.price["$numberDecimal"]}</span>
                 </div>
-                <button data-product-id={"button-" + product._id} onClick={addToCart} className='shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2 hover:opacity-75'>Add to Cart</button>
+                {product.quantity > 0 ? <button data-product-id={"button-" + product._id} onClick={addToCart} className='shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-smooth-yellow p-2 hover:opacity-75'>Add to Cart</button> : <button data-product-id={"button-" + product._id} className='shadow-md rounded-lg border-black-50  text-off-white md:gap-x-60 block text-2x1 font-bold bg-gray-500 cursor-not-allowed p-2 hover:opacity-75 disabled: '>Add to Cart</button>}
+                
               </div> 
             ))}
           </div>

@@ -57,6 +57,21 @@ const confirmOrder = async (req, res) => {
             }
         });
 
+    // subtract from inventory
+    // const orderItems = await OrderItem.find({transactionId: orderId});
+    // orderItems.map(async (orderItem) => {
+    //     await Product.findOneAndUpdate(
+    //         {
+    //             _id: orderItem.productId
+    //         },
+    //         {
+    //             $dec: {
+    //                 quantity: parseInt(orderItem.quantity)
+    //             }
+    //         }
+    //     )
+    // });
+
     res.send({ message: "Order confirmed successfully." });
 };
 
@@ -178,6 +193,8 @@ const createOrder = async (req, res) =>
             price: item.price
         });
         await ShoppingCart.findByIdAndDelete(item._id);
+        const product = await Product.findById(item.productId);
+        product.quantity -= item.quantity;
     });
 
     return res.json({ transactionId: orderTransaction._id });
