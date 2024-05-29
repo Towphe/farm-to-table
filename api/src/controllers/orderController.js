@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import OrderTransaction from "../models/OrderTransaction.js";
 import OrderItem from "../models/OrderItem.js";
 import {DateTime} from "luxon";
@@ -29,41 +29,74 @@ Create list of orders:
 * for loop in a way
 * sort according to productId
 
-Create order:
+Create order
 * import body ng OrderTransaction then post sa website yung request
 */
 
-const findOrder = async (req, res) =>
-{
-    // find matching orders. Use productId to double check
-    const ord = await OrderItem.findById(req.params.transactionId);
-    const prod = await OrderItem.findById(req.params.productId);
+// const findOrder = async (req, res) =>
+// {
+//     // find matching orders. Use productId to double check
+//     const ord = await OrderItem.findById(req.params.transactionId);
+//     const prod = await OrderItem.findById(req.params.productId);
     
-    if (!(ord && prod))
-        return res.status(404).json({ message: 'Order not found.' });
+//     if (!(ord && prod))
+//         return res.status(404).json({ message: 'Order not found.' });
 
-    res.send(ord, prod);
-};
+//     res.send(ord, prod);
+// };
+
+const retrieveOrder = async (req, res) => {
+    const orderId = req.params.orderId;
+    const order = await OrderTransaction.findById(orderId);
+
+    // check first if order exists.
+    if (order === null){
+        res.statusCode = 404;
+        res.json({detail: 'Order non-existent'});
+        return;
+    }
+
+    const items = await OrderItem.aggregate([
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "productId",
+                    foreignField: "_id",
+                    as: "detail"
+                }
+            }
+    ]);
+
+    if (items.length === 0){
+        res.statusCode = 404;
+        res.json({detail: 'Order non-existent'});
+        return
+    }
+
+    let specificItems = [];
+    items.map(item => {    
+        // insert matching order items
+        if (item.transactionId.toString() === orderId){
+            specificItems.push(item);
+        }
+    })
+    res.json({
+        details: order,
+        items: specificItems
+    });
+    return 
+}
 
 const listOrders = async (req, res) =>
-{
-    const pg = isUndefined(req.query.pg) ? 1 : req.query.pg; // page number: if undefined pg, set to 1. Else, get value of pg
-    const cnt = isUndefined(req.query.cnt) ? 10 : req.query.cnt; // number of orders per page: if undefined cnt, set to 10. Else, get value of cnt
+{   
+    const userId = req.user.userId;
+    console.log(req.user.userId);
 
-    const ord_Cnt = OrderItem.length; // get length of the orderItem model array.
-    const pg_Cnt = Math.floor(ord_Cnt / cnt) + 1; // get number of pages and add extra page for remaining orders
-
-    // noted na walang magsiskip na orders sa page 1 kaya bawas ng 1 sa pg const e.g., (1 - 1) * 10 => 0 orders to skip for page 1
-    // skip the first 10 orders... so on and so forth e.g., (2 - 1) * 10 => 10 orders to skip for page 2... so on and so forth
-    // limit 10 orders per page
-    const ords = await OrderItem.find().skip((pg - 1) * cnt).limit(cnt);
+    // include products later
+    const orders = await OrderTransaction.find({userId: userId})
 
     // send number of orders per page and page number
-    res.send(
-    {
-        orders: ords,
-        pages: pg_Cnt
-    });
+    res.send(orders);
 };
 
 const createOrder = async (req, res) =>
@@ -123,4 +156,4 @@ const confirmOrder = async (req, res) =>
     });
 };
 
-export{ findOrder, listOrders, createOrder, confirmOrder };
+export{ retrieveOrder, listOrders, createOrder, confirmOrder };

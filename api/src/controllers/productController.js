@@ -17,21 +17,6 @@ const isUndefined = (T) => {
     return false;
 }
 
-// const ShoppingCart = mongoose.model('ShoppingCart', {
-//     userId: mongoose.Types.ObjectId,
-//     productName: String,
-//     productId: mongoose.Types.ObjectId,
-//     price: {
-//         default: 0,
-//         required: true,
-//         type: mongoose.Types.Decimal128,
-//     },
-//     quantity: {
-//         default: 0,
-//         required: true,
-//         type: Number,
-//     }
-// });
 
 const retrieveProduct = async (req, res) => {
     const product = await Product.findById(req.params.productId);

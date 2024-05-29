@@ -26,6 +26,7 @@ import AdminHomePage from './pages/AdminHomepage.jsx'
 import CheckoutView from './pages/CheckoutView.jsx'
 import OrderSuccess from './pages/SuccessView.jsx'
 import OrdersList from './pages/OrdersList.jsx'
+import OrderInfo from './pages/OrderInfo.jsx'
 
 
 const router = createBrowserRouter([
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
             {
                 path: 'orders',
                 element: <OrdersList/>
+            },
+            {
+                path: 'orders/:orderId',
+                element: <OrderInfo />
             },
             {
                 path: 'checkout-view',

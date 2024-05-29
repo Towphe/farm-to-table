@@ -82,7 +82,7 @@ function CheckoutView()
   {
     console.log("Here");
     console.log(OrderDetails);
-    await axios.post('http://localhost:3000/api/order/create-order',
+    await axios.post('http://localhost:3000/api/orders/create-order',
       {
         totalPrice: total,
         house_num: OrderDetails.house_num,
