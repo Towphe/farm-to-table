@@ -45,6 +45,18 @@ Create order
 //     res.send(ord, prod);
 // };
 
+const confirmOrder = async (req, res) => {
+    const orderId = req.params.email;
+    const orderStatus = req.params.status;
+
+    if (orderStatus!== 1) {
+        return res.status(405).send({ error: 'Invalid order status.' });
+    }
+    
+    await OrderTransaction.FindOneAndUpdate({_id: orderId}, {$set: {orderStatus: 1}} );
+//    res.send({ message: "Order confirmed successfully." });
+//};
+
 const retrieveOrder = async (req, res) => {
     const orderId = req.params.orderId;
     const order = await OrderTransaction.findById(orderId);
@@ -133,27 +145,27 @@ const createOrder = async (req, res) =>
     return res.json({ transactionId: orderTransaction._id });
 };
 
-const confirmOrder = async (req, res) => 
-{
-    const orderId = req.params.transactionId;
-    const orderStatus = req.params.status;
-
-    if (orderStatus !== 1) return res.status(405).send({ error: 'Invalid order status.' });
-    
-    const order = await OrderTransaction.findOneAndUpdate(
-        { _id: orderId }, 
-        { $set: {orderStatus: 1} },
-        { new: true }
-    );
-
-    if (!order) return res.status(404).send({ error: 'Order not found.' });
-
-    res.send(
-    {
-        message: "Order confirmed successfully.",
-        createdAt: order.createdAt,
-        orderId: order._id
-    });
+//const confirmOrder = async (req, res) => 
+//{
+//    const orderId = req.params.transactionId;
+//    const orderStatus = req.params.status;
+//
+//    if (orderStatus !== 1) return res.status(405).send({ error: 'Invalid order status.' });
+//    
+//    const order = await OrderTransaction.findOneAndUpdate(
+//        { _id: orderId }, 
+//        { $set: {orderStatus: 1} },
+//        { new: true }
+//    );
+//
+//    if (!order) return res.status(404).send({ error: 'Order not found.' });
+//
+//    res.send(
+//    {
+//        message: "Order confirmed successfully.",
+//        createdAt: order.createdAt,
+//        orderId: order._id
+//    });
 };
 
 const cancelOrder = async (req, res) => 

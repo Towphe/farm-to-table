@@ -17,7 +17,6 @@ const isUndefined = (T) => {
     return false;
 }
 
-
 const retrieveProduct = async (req, res) => {
     const product = await Product.findById(req.params.productId);
 
