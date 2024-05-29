@@ -18,7 +18,6 @@ const authenticateJWT = (req, res, next) => {
                 res.statusCode = 403;
                 return res.send({'detail' : 'Token expired. Signin again to continue session.'});
             }
-            console.log(user);
             req.user = user;
 
             next();

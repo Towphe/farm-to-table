@@ -55,7 +55,7 @@ function Reports() {
 
     // display reports
     return (
-        <main className="w-full h-full flex flex-col pt-16 items-center gap-12">
+        <main className="flex flex-col items-center w-full h-full overflow-x-hidden gap-6 pt-10">
             <div className="text-center">
                 <h1 className="text-3xl font-bold">Sales Report</h1>
                 <span>as of {DateTime.now().toFormat('MMMM d, y')}</span>
