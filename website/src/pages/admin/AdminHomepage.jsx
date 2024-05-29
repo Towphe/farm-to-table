@@ -40,8 +40,8 @@ function AdminHomePage(){
             <div className="text-lg flex flex-col gap-6">
                 <h2 className="text-3xl font-bold text-center">Welcome back!</h2>
                 <span>As of {currentDate.monthLong} {currentDate.day}, {currentDate.year}, you have {pendingCount} pending {pendingCount === 1 ? "order" : "orders"}.</span>
-                <h3 className="text-center">Top 5 products ordered</h3>
-                <div className="flex justify-center">
+                <h3 className="text-center">Recently ordered products</h3>
+                <div className="flex flex-col  justify-center">
                     {
                         topProducts.map((product) => {
                             return(<div className="flex justify-between w-full py-2 px-2 shadow-md" key={product.id}>
