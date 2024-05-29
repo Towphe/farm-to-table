@@ -139,9 +139,9 @@ const router = createBrowserRouter([
 
 function App(){
     axios.defaults.withCredentials = true;
-    useEffect(() => {
-        axios.post("http://localhost:3000/api/auth/refresh", {}, {withCredentials:true});
-    }, []);
+    // useEffect(() => {
+    //     axios.post("http://localhost:3000/api/auth/refresh", {}, {withCredentials:true});
+    // }, []);
 
     return (
         <>
