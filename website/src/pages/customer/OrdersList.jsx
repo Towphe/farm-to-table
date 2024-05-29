@@ -47,6 +47,7 @@ function OrdersList(){
         <main className="relative w-full h-full overflow-x-hidden gap-6">
             <h1 className="w-screen h-auto text-center absolute top-6 block font-bold text-2xl"> Order List </h1>
             <div className="w-screen h-auto flex flex-shrink-0 flex-col items-center gap-5 md:flex-col justify-center mt-24">
+            
             <table className="w-3/4 text-md text-left rtl:text-right text-slate-800">
                 <thead className="text-md text-slate-800 uppercase ">
                     <tr>
@@ -65,6 +66,7 @@ function OrdersList(){
                     </tr>)}
                 </tbody>
             </table>
+            {orders.length === 0 ? <p className="w-screen text-center text-2xl text-gray-600">Currently no Orders</p> : <></>}
             </div>
         </main>
     );

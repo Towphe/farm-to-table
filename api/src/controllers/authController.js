@@ -34,18 +34,12 @@ const signup = async (req, res) => {
     user.email = req.body.email;
     user.password = await bcrypt.hash(req.body.password, saltRounds);
 
-    let accessToken;
-    let refreshToken;
     // save user to db
-    await user.save()
-        .then(res => {
-            let accessToken = jwt.sign({userId: user._id.toString(), userType: user.userType}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
-            let refreshToken = jwt.sign({userId: user._id.toString(), userType: user.userType}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '1d'});        
-        });
+    await user.save();
 
     // generate access token & refresh token
-    // let accessToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
-    // let refreshToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '1d'});
+    const accessToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
+    const refreshToken = jwt.sign({userId: user._id, userType: user.userType}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '1d'});
     
     res.cookie('accessToken', accessToken, {
         httpOnly: true,
