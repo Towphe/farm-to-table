@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from 'react-router-dom';
-import { useAuth } from "../components/common/AuthProvider.jsx";
+import { useAuth } from "../../components/common/AuthProvider.jsx";
 import { useNavigate } from "react-router-dom";
 
 // https://v1.tailwindcss.com/components/forms

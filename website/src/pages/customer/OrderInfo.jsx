@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {useAuth} from "../components/common/AuthProvider.jsx";
-import LoadingScreen from "../components/common/LoadingScreen.jsx";
+import {useAuth} from "../../components/common/AuthProvider.jsx";
+import LoadingScreen from "../../components/common/LoadingScreen.jsx";
 import axios from "axios";
 import { DateTime } from "luxon";
 

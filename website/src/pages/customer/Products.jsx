@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {Link, useNavigate, useSearchParams} from 'react-router-dom';
-import LoadingScreen from "../components/common/LoadingScreen";
-import { useAuth } from "../components/common/AuthProvider";
+import LoadingScreen from "../../components/common/LoadingScreen.jsx";
+import { useAuth } from "../../components/common/AuthProvider.jsx";
 
 function Products(){
 
@@ -47,7 +47,7 @@ function Products(){
     };
 
     if (isLoading){
-      return <LoadingScreen />
+      return (<LoadingScreen />)
     }
 
     return (

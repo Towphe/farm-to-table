@@ -1,5 +1,5 @@
-import CustomerNavBar from "../components/common/CustomerNavbar";
-import Footer from "../components/common/Footer";
+import CustomerNavBar from "../../components/common/CustomerNavbar";
+import Footer from "../../components/common/Footer";
 
 
 function Homepage(){

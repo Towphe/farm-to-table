@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {Link, useSearchParams} from 'react-router-dom';
-import LoadingScreen from "../components/common/LoadingScreen";
+import LoadingScreen from "../../components/common/LoadingScreen";
 
 function ProductList(){
 

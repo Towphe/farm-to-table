@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import {DateTime} from "luxon";
-import LoadingScreen from "../components/common/LoadingScreen";
+import LoadingScreen from "../../components/common/LoadingScreen";
 
 function Reports() {
     // initialize reports
