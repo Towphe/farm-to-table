@@ -22,7 +22,6 @@ function AdminOrderList()
 
     axios.get(`http://localhost:3000/api/admin/orders?${params.toString()}`)
       .then(response => {
-        console.log(response)
         setOrders(response.data.orders);
         setPageCount(response.data.pages);
       })
@@ -45,6 +44,7 @@ function AdminOrderList()
   const rejectOrder = (orderId) => {
     axios.patch(`http://localhost:3000/api/admin/orders/${orderId}/reject`)
       .then((res) => {
+        console.log(res);
         navigate("/admin/orders", {replace: true});
         return;
       });

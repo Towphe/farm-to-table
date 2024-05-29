@@ -60,20 +60,20 @@ const confirmOrder = async (req, res) => {
     res.send({ message: "Order confirmed successfully." });
 };
 
-const rejectOrder = async (req, res) => {
-    const orderId = req.params.orderId;
+// const rejectOrder = async (req, res) => {
+//     const orderId = req.params.orderId;
     
-    const order = await OrderTransaction.findOneAndUpdate(
-        {
-            _id: orderId},
-        {
-            $set: {
-                status: 2
-            }
-        });
+//     const order = await OrderTransaction.findOneAndUpdate(
+//         {
+//             _id: orderId},
+//         {
+//             $set: {
+//                 status: 2
+//             }
+//         });
 
-    res.send({ message: "Order rejected successfully." });
-};
+//     res.send({ message: "Order rejected successfully." });
+// };
 
 const retrieveOrder = async (req, res) => {
     const orderId = req.params.orderId;
@@ -189,8 +189,9 @@ const createOrder = async (req, res) =>
 const cancelOrder = async (req, res) => 
 {   
     const order = await OrderTransaction.findOne({_id: req.params.orderId});
-
-    if (req.userType != 'ADMIN' && req.userId != order.userId.toString()){
+    
+    if (req.userType != 'ADMIN' && req.user.userId != order.userId.toString()){
+        console.log("Not authorized")
         res.statusCode = 403;
         res.send({detail: 'Not authorized to reject order.'})
         return
@@ -201,7 +202,7 @@ const cancelOrder = async (req, res) =>
     const items = await OrderItem.find({transactionId: req.params.orderId});
     items.map(async (item) => {
         let product = await Product.findById(item.productId);
-        product += item.quantity;
+        product.quantity += item.quantity;
         product.save();
     });
 
@@ -223,4 +224,4 @@ const updateOrder = async (req, res) =>
         return res.json({ detail: `Transaction Modified.`});
     }
 
-export{ retrieveOrder, rejectOrder, listAllOrders, listOrders, createOrder, confirmOrder, cancelOrder, updateOrder};
+export{ retrieveOrder, cancelOrder, listAllOrders, listOrders, createOrder, confirmOrder, updateOrder};
