@@ -124,4 +124,34 @@ const confirmOrder = async (req, res) =>
     });
 };
 
-export{ findOrder, listOrders, createOrder, confirmOrder };
+const cancelOrder = async (req, res) => 
+{
+    const ordStat = await OrderTransaction.findOneAndUpdate(
+        {
+            _id: req.params.orderId
+        },
+        {
+            $set : {
+                status : 2
+            }
+        }
+    )
+    return res.json({ detail: `Transaction Cancelled.`});
+}
+
+const updateOrder = async (req, res) => 
+    {
+        const ordStatus = await OrderTransaction.findOneAndUpdate(
+            {
+                _id: req.params.orderId
+            },
+            {
+                $set : {
+                    status : 1
+                }
+            }
+        )
+        return res.json({ detail: `Transaction Modified.`});
+    }
+
+export{ findOrder, listOrders, createOrder, confirmOrder, cancelOrder, updateOrder};
