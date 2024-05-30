@@ -24,6 +24,13 @@ const confirmOrder = async (req, res) => {
         res.json({detail: "Not authorized to confirm order."})
         return;
     }
+
+    if (order.status !== 0){
+        res.statusCode = 400;
+        res.send({detail: 'Order no longer available for confirmation'})
+        return
+    }
+
     const orderId = req.params.orderId;
     
     const order = await OrderTransaction.findOneAndUpdate(
@@ -198,6 +205,14 @@ const cancelOrder = async (req, res) =>
         res.send({detail: 'Not authorized to reject order.'})
         return
     }
+
+    // forbid action if order is no longer pending
+    if (order.status !== 0){
+        res.statusCode = 400;
+        res.send({detail: 'Order no longer available for cancellation'})
+        return
+    }
+
     order.status = 2;
     order.save();
 
