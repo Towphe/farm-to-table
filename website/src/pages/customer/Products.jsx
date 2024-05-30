@@ -3,6 +3,7 @@ import axios from "axios";
 import {Link, useNavigate, useSearchParams} from 'react-router-dom';
 import LoadingScreen from "../../components/common/LoadingScreen.jsx";
 import { useAuth } from "../../components/common/AuthProvider.jsx";
+import PopupNotification from "../../components/common/PopupNotfication.jsx";
 
 function Products(){
 
@@ -12,6 +13,7 @@ function Products(){
     const [sort, setSort] = useState(searchParams.get('sort') || 'name');
     const [filter, setFilter] = useState(searchParams.get('filter') || '');
     const [isLoading, setIsLoading] = useState(true);
+    const [showPopup, setShowPopup] = useState(false);
     const {role} = useAuth();
     const navigate = useNavigate();
 
@@ -53,12 +55,27 @@ function Products(){
         price: parseFloat(product.price['$numberDecimal']),
         quantity: product.quantity
       }, {withCredentials: true});
+
+      const toRef = setTimeout(() => {
+        setShowPopup(true);
+        clearTimeout(toRef);
+      }, 100);
+      setShowPopup(false);
     };
 
     const handleSortChange = (e) => {
       setSort(e.target.value);
       setSearchParams({ ...Object.fromEntries(searchParams), sort: e.target.value });
   };
+
+  useEffect(() => {
+    if (showPopup){
+      const toRef = setTimeout(() => {
+        setShowPopup(false);
+        clearTimeout(toRef);
+      }, 2000)
+    }
+  }, [showPopup]);
 
   const handleFilterChange = (e) => {
       setFilter(e.target.value);
@@ -72,6 +89,7 @@ function Products(){
     return (
         <main className="relative w-full h-full overflow-x-hidden">
           <h1 className="w-screen h-auto text-center block py-6 font-bold text-3xl">Available Products</h1>
+          {showPopup ? <PopupNotification message="Added to cart" status="success" /> : <></>  }
           <div className="flex flex-shrink-0 flex-row gap-3 md:flex-row justify-center px-20 pt-4">
               <label htmlFor="sorting"> Sort by:</label>
               <select className="font-semibold text-yellow-600" name="sorting" id="sorting" value={sort} onChange={handleSortChange}>

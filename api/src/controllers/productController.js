@@ -78,32 +78,38 @@ const addProductImage = async (req, res) => {
 }
 
 const saveToCart = async (req, res) => {
-    const cart = await ShoppingCart.findOneAndUpdate(
-        {
-            // query/match
-            userId: req.user.userId,
-            productName: req.body.productName
-        },
-        {   
-            // to update / to insert
-            $set : {
-                userId: req.user.userId,
-                productName: req.body.productName,
-                productId: req.body.productId
-            },
-            $inc :{
-                quantity: 1,
-                price: parseFloat(req.body.price)
-            }
-        },
-        {
-            // options
-            upsert: true,
-            new: true
-        }
-    )
+    const product = await Product.findById(req.body.productId);
 
-    return res.json({ detail: `Added to cart.` });
+    if (!product){
+        // product non-existent
+        res.statusCode = 404;
+        res.json({detail: "Product non-existent"});
+        return;
+    }
+
+    let item = await ShoppingCart.findOne({userId: req.user.userId, productId: req.body.productId});
+
+    if (!item){
+        // item not yet in cart
+        ShoppingCart.create({
+            userId: req.user.userId,
+            productName: req.body.productName,
+            productId: req.body.productId,
+            price: parseFloat(req.body.price),
+            quantity: 1
+        });
+    } else{
+        if (item.quantity === product.quantity){
+            res.statusCode = 400;
+            res.json({detail: 'Max quantity of product reached.'})
+            return;
+        }
+        item.quantity += 1;
+        item.price = req.body.price * item.quantity;
+        item.save();
+    }
+    res.json({ detail: `Added to cart.` });
+    return ;
 }
 
 const retrieveCart = async (req, res) => {
