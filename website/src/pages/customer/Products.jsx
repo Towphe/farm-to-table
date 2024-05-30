@@ -9,25 +9,34 @@ function Products(){
     const [products, setProducts] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [searchParams, setSearchParams] = useSearchParams();
+    const [sort, setSort] = useState(searchParams.get('sort') || 'name');
+    const [filter, setFilter] = useState(searchParams.get('filter') || '');
     const [isLoading, setIsLoading] = useState(true);
     const {role} = useAuth();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const params = new URLSearchParams({
+    const fetchProducts = () => {
+      const params = new URLSearchParams({
           p: searchParams.get('p') ?? 1,
-          c: searchParams.get('c') ?? 10
-        });
+          c: searchParams.get('c') ?? 10,
+          sort,
+          filter
+      });
 
-        axios.get(`http://localhost:3000/api/product?${params.toString()}`)
-          .then(response => {
-            setProducts(response.data.products);
-            setPageCount(response.data.pages)
-            setIsLoading(false);
-          })
-          .catch(error => console.error('Error fetching products:', error));
-      }, [searchParams]);
-      
+      axios.get(`http://localhost:3000/api/product?${params.toString()}`)
+        .then(response => {
+          setProducts(response.data.products);
+          setPageCount(response.data.pages);
+
+        })
+        .catch(error => console.error('Error fetching products:', error));
+  };
+
+  useEffect(() => {
+      fetchProducts();
+      setIsLoading(false);
+  }, [searchParams, sort, filter]);
+
     const addToCart = async (e) => {
       // if user is unauthenticated, renavigate to signin
       if (role === undefined){
@@ -46,6 +55,16 @@ function Products(){
       }, {withCredentials: true});
     };
 
+    const handleSortChange = (e) => {
+      setSort(e.target.value);
+      setSearchParams({ ...Object.fromEntries(searchParams), sort: e.target.value });
+  };
+
+  const handleFilterChange = (e) => {
+      setFilter(e.target.value);
+      setSearchParams({ ...Object.fromEntries(searchParams), filter: e.target.value });
+  };
+
     if (isLoading){
       return (<LoadingScreen />)
     }
@@ -53,6 +72,25 @@ function Products(){
     return (
         <main className="relative w-full h-full overflow-x-hidden">
           <h1 className="w-screen h-auto text-center block py-6 font-bold text-3xl">Available Products</h1>
+          <div className="flex flex-shrink-0 flex-row gap-3 md:flex-row justify-center px-20 pt-4">
+              <label htmlFor="sorting"> Sort by:</label>
+              <select className="font-semibold text-yellow-600" name="sorting" id="sorting" value={sort} onChange={handleSortChange}>
+                  <option value="name">Alphabetical</option>
+                  <option value="quantity">Quantity</option>
+                  <option value="price">Price</option>
+              </select>
+
+              <label htmlFor="filtering"> Filter by Type:</label>
+              <input
+                  type="text"
+                  className="font-semibold text-yellow-600"
+                  name="filtering"
+                  id="filtering"
+                  value={filter}
+                  onChange={handleFilterChange}
+                  placeholder="Enter product type"
+              />
+            </div>
           <div className="w-screen h-auto flex flex-col flex-wrap items-center gap-6 md:flex-row justify-center">
             {products.map((product) => (
               <div key={product._id} className="w-1/2 md:w-1/4 lg:w-1/5 flex flex-col flex-shrink-0 items-center justify-center shadow-md rounded-t-md border-black-50 bg-opacity-60 p-3">
